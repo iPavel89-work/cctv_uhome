@@ -17,6 +17,8 @@ $role_dictionary = [
     "5" => "role_user",
     "6" => "role_sale",
 ];
+
+
 $profiles = array("guest","internet","staff","unlimited");
 
 if($DEV_MODE){

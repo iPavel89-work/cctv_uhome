@@ -11,6 +11,10 @@ if(!isset($_SESSION['house_list']) || empty($_SESSION['house_list']) ){
     header('Location: ' . $document_root . '/dashboard/placeholder.php');
     exit;
 }
+//unset
+unset ($_SESSION['current_camera']);
+
+//end unset
 $session_version = $_SESSION['session_version'];
 if ($session_version !== $check_version['session']) {
     session_destroy();

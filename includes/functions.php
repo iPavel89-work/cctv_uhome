@@ -208,13 +208,12 @@ function cameras_info($house_id){ //получение информации о �
     $params =array($house_id);
     $result = executeQuery($sql, $params);
     if(empty($result)){
-        return false;
+        return array();
     }
     $data = array();
     $intercoms =array();
     $cameras = array();
     $gates = array();
-    $forpost = array();
     $camera_list=array();
     foreach($result as $key=> $row){
         $camera_list[]=$row['i_id'];
@@ -251,9 +250,28 @@ function cameras_info($house_id){ //получение информации о �
     $data['intercom'] = $intercoms;
     $data['camera'] = $cameras;
     $data['gate'] = $gates;
-    $data['forpost']=$forpost;
     $data['camera_list']=$camera_list;
     //echo json_encode($data,JSON_UNESCAPED_UNICODE,JSON_PRETTY_PRINT);
     return $data;
 
+}
+
+function intercom_get_events($data){
+    include "dict.php";
+    $date = $data['date'];
+    $i_id= $data['i_id'];
+    $sql = "select action, action_date,id from calls_log WHERE  i_id = ? and CAST(action_date AS date) = CAST(?  AS date)  order by action_date DESC";
+    $params = array($i_id,$date);
+    $result = executeQuery($sql,$params);
+    if(empty($result)){
+        return array();
+    }
+    foreach ($result as $row) {
+        $timestamp = strtotime($row['action_date']);
+        $action = $events_dictionary[$row['action']];
+
+        $json[] = array("ID"=>$row['id'],"Time"=>$timestamp,"Duration"=>30,"EventSubjectID"=>$action);
+
+    }
+    return $json;
 }

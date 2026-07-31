@@ -30,8 +30,9 @@ if($auth===false){
 // Регенерация сессии после авторизации
 session_regenerate_id(true);
 $_SESSION['auth_state'] = true;
-$_SESSION['login'] = $login;
+$_SESSION['user_login'] = $login;
 $_SESSION['user_id'] = $auth['id'];
+$_SESSION['user_role'] = $auth['role'];
 $_SESSION['fullname'] = $auth['fullname'];
 $_SESSION['house_list'] = $auth['house_list'];
 $_SESSION['active'] = $auth['active'];
