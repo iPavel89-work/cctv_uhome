@@ -36,6 +36,7 @@ function fp_archive_url($data){ //получаем ссылку на архив
     $session_id=$data['session_id'];
     $ts=$data['ts'];
     $tz='18000';
+    $format=$data['format']??"HLS";
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
@@ -47,7 +48,7 @@ function fp_archive_url($data){ //получаем ссылку на архив
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => "SessionID=$session_id&CameraID=$camera_id&ts=$ts&tz=$tz&Format=HLS",
+        CURLOPT_POSTFIELDS => "SessionID=$session_id&CameraID=$camera_id&TS=$ts&TZ=$tz&Format=$format",
     ));
 
     $response = curl_exec($curl);
@@ -161,14 +162,45 @@ function fp_get_events($data){ //Получение ссылки на скачк
 
     curl_close($curl);
     if(!$response){
-        $data['result']='error';
+        $data=array();
         return $data;
     }
     $data = json_decode($response, true);
     if(isset($data['Error'])){
-        $data['result']='error';
+        $data=array();
         return $data;
     }
     return $data; //в ответе URL это адрес трансляции
 }
+function fp_close_translation($data){ //закрываем трансляцию
+    $url=$data['url'];
+    $session_id=$data['session_id'];
 
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://cam.uhome.kz/api/StopTranslation',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 5,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => "SessionID=$session_id&URL=$url",
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    if(!$response){
+        $data=array();
+        return $data;
+    }
+    $data = json_decode($response, true);
+    if(isset($data['Error'])){
+        $data=array();
+        return $data;
+    }
+    return $data; //в ответе URL это адрес трансляции
+
+}

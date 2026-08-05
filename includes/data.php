@@ -12,7 +12,7 @@ if(!isset($_SESSION['house_list']) || empty($_SESSION['house_list']) ){
     exit;
 }
 //unset
-unset ($_SESSION['current_camera']);
+//unset ($_SESSION['current_camera']);
 
 //end unset
 $session_version = $_SESSION['session_version'];

@@ -23,6 +23,7 @@ function auth($account, $password)
     }
     unset($row['password']);
     $row['house_list']=explode(',', $row['houses']);
+
     return $row;
 }
 
@@ -118,8 +119,8 @@ function sanitize_text($data): string
     return htmlspecialchars($data, ENT_QUOTES, 'UTF-8'); // защита от XSS при выводе
 }
 
-
-function get_permitions($user_id)// получаем права
+// получаем права
+function get_permitions($user_id)
 {
     $sql = "select * from cctv_perm where user_id = ?";
     $params = array($user_id);
@@ -129,7 +130,9 @@ function get_permitions($user_id)// получаем права
     }
     return $result[0];
 }
-function get_session_version($user_id){ //проверяем версию сессии
+
+//проверяем версию сессии
+function get_session_version($user_id){
     $sql = "select session from cctv_users where id = ?";
     $params = array($user_id);
     $result = executeQuery($sql,$params);
@@ -170,8 +173,8 @@ function check_captcha($cap_token){
     return json_decode($response,true);
 }
 
-
-function get_ua($ua){ //получаем читаемый юзер агент
+//получаем читаемый юзер агент
+function get_ua($ua){
 
     $platform = 'Other';
     $browser  = 'Other';
@@ -201,7 +204,9 @@ function get_ua($ua){ //получаем читаемый юзер агент
     return $ua_short;
 }
 
-function cameras_info($house_id){ //получение информации о пользователе
+
+//получение информации о пользователе
+function cameras_info($house_id){
     $sql = "select i_id,ip,login,password,name,fp_login,fp_pass,camera_id,url, api,server,device_t from intercoms where house_id = ?
             and i_id not in(select camera_id from private_cameras)
             order by cam_number";
@@ -224,7 +229,11 @@ function cameras_info($house_id){ //получение информации о �
                 'screen'=>str_replace("rtsp", "jh", $row['url']),
                 'i_id'=>$row['i_id'],
                 'fp_login'=>$row['fp_login'],
-                'fp_pass'=>$row['fp_pass']
+                'fp_pass'=>$row['fp_pass'],
+                'camera_ip'=>$row['ip'],
+                'camera_login'=>$row['login'],
+                'camera_password'=>$row['password'],
+
             );
 
         }
@@ -234,7 +243,10 @@ function cameras_info($house_id){ //получение информации о �
                 'screen'=>str_replace("rtsp", "jh", $row['url']),
                 'i_id'=>$row['i_id'],
                 'fp_login'=>$row['fp_login'],
-                'fp_pass'=>$row['fp_pass']
+                'fp_pass'=>$row['fp_pass'],
+                'camera_ip'=>$row['ip'],
+                'camera_login'=>$row['login'],
+                'camera_password'=>$row['password'],
             );
         }
         if($row['device_t']=='gate'){
@@ -243,7 +255,10 @@ function cameras_info($house_id){ //получение информации о �
                 'screen'=>str_replace("rtsp", "jh", $row['url']),
                 'i_id'=>$row['i_id'],
                 'fp_login'=>$row['fp_login'],
-                'fp_pass'=>$row['fp_pass']
+                'fp_pass'=>$row['fp_pass'],
+                'camera_ip'=>$row['ip'],
+                'camera_login'=>$row['login'],
+                'camera_password'=>$row['password'],
             );
         }
     }
@@ -256,6 +271,7 @@ function cameras_info($house_id){ //получение информации о �
 
 }
 
+//получение списка событий
 function intercom_get_events($data){
     include "dict.php";
     $date = $data['date'];
@@ -274,4 +290,342 @@ function intercom_get_events($data){
 
     }
     return $json;
+}
+
+//Блок alrp
+function get_alrp($data){  //получаем список alrp
+    $i_id = $data['i_id'];
+    $sql = "select a.id, c.id as customer_id , a.alrp, a.description, cam_id, alrp_group, c.fullname, c.full_address, c.flat, a.date_from, a.date_to from alrp a
+            inner join customer c on (c.id = a.customer_id)
+            where cam_id = ? and a.active =1";
+    $params = array($i_id);
+    $result = executeQuery($sql,$params);
+    if(empty($result)){
+        return array();
+    }
+    return $result;
+
+}
+function add_alrp($data){ //добавляем номер в бд
+    $i_id = $data['i_id'];
+    $lp = $data['lp'];
+    $customer_id = $data['customer_id'];
+    $group = $data['group'];
+    $date_to=$data['date_to'];
+    $date_from = $data['date_from'];
+    $description = $data['description'];
+    //данные камеры
+    $camera_ip =$data['camera_ip'];
+    $camera_login =$data['camera_login'];
+    $camera_password =$data['camera_password'];
+    $auth = base64_encode($camera_login.":".$camera_password);
+
+
+    $xml_data =  [
+        '_attributes' => [
+            'version' => '2.1.0',
+            'xmlns' => 'http://www.ipc.com/ver10'
+        ],
+
+        'licensePlates' => [
+            '_attributes' => [
+                'type' => 'list',
+                'maxCount' => 100,
+                'count' => 1
+            ],
+
+            'item' => [
+                [
+                    'index' => 30,
+                    'licensePlateNumber' => $lp,
+                    'groupId' => $group,
+                    'beginTime' => $date_from,
+                    'endTime' => $date_to,
+                    'carOwner' => $customer_id
+                ]
+            ]
+        ]
+    ];
+    $xml = arrayToXml($xml_data);
+
+
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => "http://$camera_ip/AddLicensePlates",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 5,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>$xml,
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/xml',
+            'Authorization: Basic '.$auth,
+        ),
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+        $xml_response = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOCDATA);
+    // LIBXML_NOCDATA — обязательно, иначе CDATA-блоки (deviceName, ip)
+    // превратятся в пустые объекты вместо строк
+
+    $json = json_encode($xml_response,JSON_UNESCAPED_UNICODE);
+    $result = json_decode($json,true)['licensePlatesReply']['item']['errorCode']??'99';
+    if($result!=0){
+        $res['result']='error';
+        return $res;
+    }
+    //добавляем в БД
+    $sql = "insert into alrp set alrp = ?, cam_id = ?, customer_id = ?, description = ?, alrp_group = ?, date_to=?, date_from = ?";
+    $params = array($lp,$i_id,$customer_id,$description,$group,$date_to,$date_from);
+    $result = executeQuery($sql,$params);
+    if(empty($result)){
+        $res['result']='error';
+        return $res;
+    }
+    $res['result']='success';
+    return $res;
+
+}
+
+
+//редактирование номера
+function edit_alrp($data){
+    $i_id = $data['i_id'];
+    $lp = $data['lp'];
+    $customer_id = $data['customer_id'];
+    $group = $data['group'];
+    $date_to=$data['date_to'];
+    $date_from = $data['date_from'];
+    $description = $data['description'];
+    //данные камеры
+    $camera_ip =$data['camera_ip'];
+    $camera_login =$data['camera_login'];
+    $camera_password =$data['camera_password'];
+    $auth = base64_encode($camera_login.":".$camera_password);
+    $xml_data = [
+        '_attributes' => [
+            'version' => '2.1.0',
+            'xmlns' => 'http://www.ipc.com/ver10'
+        ],
+
+        'licensePlate' => [
+            'licensePlateNumber' => $lp,
+            'carOwner' => $customer_id,
+            'groupId' => $group,
+            'beginTime' => $date_from,
+            'endTime' => $date_to,
+        ]
+    ];
+    $xml = arrayToXml($xml_data);
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => "http://$camera_ip/ModifyLicensePlate",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 5,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>$xml,
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/xml',
+            'Authorization: Basic '.$auth,
+        ),
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    $xml_response = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOCDATA);
+    // LIBXML_NOCDATA — обязательно, иначе CDATA-блоки (deviceName, ip)
+    // превратятся в пустые объекты вместо строк
+    $json = json_encode($xml_response,JSON_UNESCAPED_UNICODE);
+//    echo $json;
+    $result = json_decode($json,true)['@attributes']['errorCode']??'99';
+    if($result!=0){
+        $res['result']='error';
+        return $res;
+    }
+    //добавляем в БД
+    $sql = "update alrp set  cam_id = ?, customer_id = ?, description = ?, alrp_group = ?, date_to=?, date_from = ? where alrp = ?";
+    $params = array($i_id,$customer_id,$description,$group,$date_to,$date_from,$lp);
+    $result = executeQuery($sql,$params);
+    if(empty($result)){
+        $res['result']='error';
+        return $res;
+    }
+    $res['result']='success';
+    return $res;
+
+
+
+}
+
+function remove_alrp($data){
+    $i_id = $data['i_id'];
+    $lp = $data['lp'];
+    //данные камеры
+    $camera_ip =$data['camera_ip'];
+    $camera_login =$data['camera_login'];
+    $camera_password =$data['camera_password'];
+    $auth = base64_encode($camera_login.":".$camera_password);
+
+    $xml_data =  [
+        '_attributes' => [
+            'version' => '2.1.0',
+            'xmlns' => 'http://www.ipc.com/ver10'
+        ],
+
+        'deleteAction' => [
+            'licensePlateNumber' => $lp
+        ]
+    ];
+    $xml = arrayToXml($xml_data);
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => "http://$camera_ip/DeleteLicensePlate",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 5,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>$xml,
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/xml',
+            'Authorization: Basic '.$auth,
+        ),
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    $xml_response = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOCDATA);
+    // LIBXML_NOCDATA — обязательно, иначе CDATA-блоки (deviceName, ip)
+    // превратятся в пустые объекты вместо строк
+    $json = json_encode($xml_response,JSON_UNESCAPED_UNICODE);
+//    echo $json;
+    $result = json_decode($json,true)['@attributes']['errorCode']??'99';
+    if($result!=0){
+        $res['result']='error';
+        return $res;
+    }
+    //Обновляем  БД
+    $sql = "update alrp set  active = 0 where alrp = ? and cam_id = ?";
+    $params = array($lp,$i_id);
+    $result = executeQuery($sql,$params);
+    if(empty($result)){
+        $res['result']='error';
+        return $res;
+    }
+    $res['result']='success';
+    return $res;
+
+
+}
+
+//Конец блока alrp
+
+
+//Конвертация xml
+function arrayToXml(array $data, string $root = 'config'): string
+{
+    $xml = new SimpleXMLElement(
+        '<?xml version="1.0" encoding="UTF-8"?><' . $root . '/>'
+    );
+
+    buildXml($xml, $data);
+
+    return $xml->asXML();
+}
+
+
+function buildXml(SimpleXMLElement $xml, array $data): void
+{
+    foreach ($data as $key => $value) {
+
+        // Атрибуты текущего узла
+        if ($key === '_attributes') {
+            foreach ($value as $attr => $attrValue) {
+                $xml->addAttribute($attr, (string)$attrValue);
+            }
+            continue;
+        }
+
+        // Массив
+        if (is_array($value)) {
+
+            // Список элементов
+            if (isListArray($value)) {
+
+                foreach ($value as $item) {
+                    $child = $xml->addChild($key);
+
+                    if (is_array($item)) {
+                        buildXml($child, $item);
+                    } else {
+                        $child[0] = htmlspecialchars((string)$item);
+                    }
+                }
+
+            } else {
+
+                $child = $xml->addChild($key);
+                buildXml($child, $value);
+            }
+
+        } else {
+            // Обычный текстовый элемент
+            $xml->addChild(
+                $key,
+                htmlspecialchars((string)$value)
+            );
+        }
+    }
+}
+
+function isListArray(array $array): bool
+{
+    return array_keys($array) === range(0, count($array) - 1);
+}
+//конец конвертации xml
+
+function get_full_address($data){ //Получаем полный адрес по дому
+    $hid = $data['hid'];
+
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => "http://172.20.1.123:8011/get_full_address?id_building=$hid",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 5,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    if(!$response){
+        $data=array();
+        return $data;
+    }
+
+    $data = json_decode($response,true);
+    return $data[0]['full_address'];
 }

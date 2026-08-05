@@ -12,3 +12,8 @@ $events_dictionary = [ //коды событий домофонии
     "gate"=>9990
 
 ];
+$lp_group = [
+    1=>"temporary_lp",
+    2=>"white_lp",
+    3=>"black_lp"
+];

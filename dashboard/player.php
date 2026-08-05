@@ -28,7 +28,7 @@ if(array_key_exists($i_id, $_SESSION['data']['intercom'])){
     $_SESSION['current_camera']['type']='intercom';
     $camera_data=$_SESSION['data']['intercom'][$i_id];
     $camera_type = "intercom";
-    echo json_encode($_SESSION['data']['intercom'][$i_id],JSON_UNESCAPED_UNICODE);
+    echo json_encode($camera_data,JSON_UNESCAPED_UNICODE);
     echo "<br><br>";
 }
 if(array_key_exists($i_id,$_SESSION['data']['camera'])){
@@ -36,7 +36,7 @@ if(array_key_exists($i_id,$_SESSION['data']['camera'])){
     $_SESSION['current_camera']['type']='camera';
     $camera_data=$_SESSION['data']['camera'][$i_id];
     $camera_type = "camera";
-    echo json_encode($_SESSION['data']['camera'][$i_id],JSON_UNESCAPED_UNICODE);
+    echo json_encode($camera_data,JSON_UNESCAPED_UNICODE);
     echo "<br><br>";
 }
 if(array_key_exists($i_id,$_SESSION['data']['gate'])){
@@ -44,7 +44,7 @@ if(array_key_exists($i_id,$_SESSION['data']['gate'])){
     $_SESSION['current_camera']['type']='gate';
     $camera_data=$_SESSION['data']['gate'][$i_id];
     $camera_type = "gate";
-    echo json_encode($_SESSION['data']['gate'][$i_id],JSON_UNESCAPED_UNICODE);
+    echo json_encode($camera_data,JSON_UNESCAPED_UNICODE);
     echo "<br><br>";
 }
 $fp_auth = fp_auth($camera_data['fp_login'],$camera_data['fp_pass']);
@@ -54,6 +54,13 @@ if($fp_auth['result']=='error'){
 }
 $fp_session_id = $fp_auth['SessionID']; //id сессии форпоста
 $fp_cameraID = $camera_data['cameraID'];
+$_SESSION['current_camera']['session_id']=$fp_session_id;
+$_SESSION['current_camera']['camera_id']=$camera_data['cameraID'];
+$_SESSION['current_camera']['camera_ip']=$camera_data['camera_ip'];
+$_SESSION['current_camera']['camera_login']=$camera_data['camera_login'];
+$_SESSION['current_camera']['camera_password']=$camera_data['camera_password'];
+
+
 $data['session_id']=$fp_session_id;
 $data['camera_id']=$fp_cameraID;
 $data['upper_date'] = $date." 23:59:59";
@@ -68,10 +75,10 @@ $last_event = array_slice($all_events,0,5); //5 последних событи�
 $times = array_column($all_events, 'Time'); // работает и с объектами, и с массивами
 array_multisort($times, SORT_DESC, $all_events);
 
-echo json_encode($last_event,JSON_UNESCAPED_UNICODE);
-echo "<br><br>";
-echo json_encode($all_events,JSON_UNESCAPED_UNICODE);
-echo "<br><br>";
+//echo json_encode($last_event,JSON_UNESCAPED_UNICODE);
+//echo "<br><br>";
+//echo json_encode($all_events,JSON_UNESCAPED_UNICODE);
+//echo "<br><br>";
 if($fp_events['result']=='error'){
     echo "Ошибка получения событий";
     exit;
@@ -83,8 +90,39 @@ $get_translation_url = fp_online_url($data);
 if($get_translation_url['result']=='error'){
     echo "Ошибка получения потока";
 }
-$url = $get_translation_url['URL'];
-echo $url." ".$camera_data['name'];
+$translation_url = $get_translation_url['URL'];
+$_SESSION['current_camera']['url']=$translation_url;
+echo "<br>";
+//echo $url." ".$camera_data['name'];
 
+echo json_encode($_SESSION['current_camera'],JSON_UNESCAPED_UNICODE);
 
+include "../parts/head.php";
+echo "<br>";
+echo json_encode(get_alrp(["i_id"=>$i_id]),JSON_UNESCAPED_UNICODE);
+echo "<br>";
 ?>
+<?php
+foreach($_SESSION['address'] as $key=>$value):
+?>
+    <a href="../index.php?hid=<?=$key;?>"><?=$value;?></a>
+<?php
+endforeach;
+?>
+<form action="api.php" method="POST">
+    <select name="action" id="">
+        <option value="add_alrp">Добавить</option>
+        <option value="edit_alrp">Редактировать</option>
+        <option value="remove_alrp">Удалить</option>
+    </select>
+    <input type="hidden" name="i_id" value="<?= $i_id; ?>">
+    <input type="text" name="lp" value="123Asd09">
+    <input type="text" name="customer_id" value="50">
+    <input type="text" name="group" value="2">
+    <input type="text" name="date_to" value="2026-08-30 23:59:59">
+    <input type="text" name="date_from" value="2026-08-30 00:00:00">
+    <input type="text" name="description" value="тестовый абон2">
+<!--    <input type="hidden" name="ts" value="2026-07-30 08:00:00">-->
+    <input type="submit" value="изменить номер">
+
+</form>
