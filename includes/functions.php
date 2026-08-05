@@ -207,7 +207,7 @@ function get_ua($ua){
 
 //получение информации о пользователе
 function cameras_info($house_id){
-    $sql = "select i_id,ip,login,password,name,fp_login,fp_pass,camera_id,url, api,server,device_t from intercoms where house_id = ?
+    $sql = "select i_id,ip,login,password,name,fp_login,fp_pass,camera_id,url, api,server,device_t,model from intercoms where house_id = ?
             and i_id not in(select camera_id from private_cameras)
             order by cam_number";
     $params =array($house_id);
@@ -233,6 +233,8 @@ function cameras_info($house_id){
                 'camera_ip'=>$row['ip'],
                 'camera_login'=>$row['login'],
                 'camera_password'=>$row['password'],
+                'camera_type'=>$row['device_t'],
+                'camera_model'=>str_replace(" ","_",$row['model']),
 
             );
 
@@ -247,6 +249,8 @@ function cameras_info($house_id){
                 'camera_ip'=>$row['ip'],
                 'camera_login'=>$row['login'],
                 'camera_password'=>$row['password'],
+                'camera_type'=>$row['device_t'],
+                'camera_model'=>str_replace(" ","_",$row['model']),
             );
         }
         if($row['device_t']=='gate'){
@@ -259,6 +263,8 @@ function cameras_info($house_id){
                 'camera_ip'=>$row['ip'],
                 'camera_login'=>$row['login'],
                 'camera_password'=>$row['password'],
+                'camera_type'=>$row['device_t'],
+                'camera_model'=>str_replace(" ","_",$row['model']),
             );
         }
     }
@@ -601,7 +607,8 @@ function isListArray(array $array): bool
 }
 //конец конвертации xml
 
-function get_full_address($data){ //Получаем полный адрес по дому
+//Получаем полный адрес по дому
+function get_full_address($data){
     $hid = $data['hid'];
 
 
@@ -628,4 +635,70 @@ function get_full_address($data){ //Получаем полный адрес п�
 
     $data = json_decode($response,true);
     return $data[0]['full_address'];
+}
+
+//получаем список клиентов дома
+function get_customers($hid){
+    $sql = "select id,  flat from customer where house_id = ?";
+    $params = array($hid);
+    $result = executeQuery($sql,$params);
+    if(empty($result)){
+        return array();
+    }
+    return $result;
+}
+
+function open_door($data){
+    $i_id = $data['i_id'];
+    //данные камеры
+    $camera_ip =$data['camera_ip'];
+    $camera_login =$data['camera_login'];
+    $camera_password =$data['camera_password'];
+    $camera_model =$data['camera_model'];
+    $auth = base64_encode($camera_login.":".$camera_password);
+    include "models/".$camera_model.".php";
+
+}
+function open_gate($data){
+    $i_id = $data['i_id'];
+    //данные камеры
+    $camera_ip =$data['camera_ip'];
+    $camera_login =$data['camera_login'];
+    $camera_password =$data['camera_password'];
+    $camera_model =$data['camera_model'];
+    $auth = base64_encode($camera_login.":".$camera_password);
+    include "models/".$camera_model.".php";
+    $result = get_session($data);
+    if($result['result']=="error"){
+        return $result;
+    }
+    $session = $result['sessionId'];
+    $nonce = $result['nonce'];
+    $data['nonce']=$nonce;
+    $data['session_id']=$session;
+    $token = create_token($data);
+    if($token['result']=="error"){
+        return $token;
+    }
+    $data['session_id']=$token['sessionId'];
+    $data['token']=$token['token'];
+    $open = open($data);
+    return $open;
+
+
+}
+
+
+
+//Согируем события
+function log_data($data){
+    $i_id = $data['i_id'];
+    $action = $data['action'];
+    $sql = "insert into calls_log set  action = ?, action_date = CURRENT_TIMESTAMP , i_id = ?";
+    $params = array($action,$i_id);
+    $result = executeQuery($sql, $params);
+    if($result===false){
+        return false;
+    }
+    return true;
 }

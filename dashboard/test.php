@@ -12,7 +12,9 @@ if(!isset($_GET['i_id'])){
     exit;
 }
 $date = date('Y-m-d');
-
+if(isset($_GET['date'])){
+    $date = sanitize_text($_GET['date']);
+}
 
 $i_id = sanitize_text($_GET['i_id']);
 if(!in_array($i_id, $_SESSION['data']['camera_list'])){
@@ -57,6 +59,7 @@ $_SESSION['current_camera']['camera_id']=$camera_data['cameraID'];
 $_SESSION['current_camera']['camera_ip']=$camera_data['camera_ip'];
 $_SESSION['current_camera']['camera_login']=$camera_data['camera_login'];
 $_SESSION['current_camera']['camera_password']=$camera_data['camera_password'];
+$_SESSION['current_camera']['camera_model']=$camera_data['camera_model'];
 
 
 $data['session_id']=$fp_session_id;
@@ -84,15 +87,7 @@ if($fp_events['result']=='error'){
 //echo json_encode($fp_events,JSON_UNESCAPED_UNICODE);
 
 
-if(isset($_GET['date'])){
-    $date = sanitize_text($_GET['date']);
-    $data['ts']=strtotime($date);
-    $get_translation_url = fp_archive_url($data);
-}
-else{
-    $get_translation_url = fp_online_url($data);
-}
-
+$get_translation_url = fp_online_url($data);
 if($get_translation_url['result']=='error'){
     echo "Ошибка получения потока";
 }
@@ -110,7 +105,7 @@ echo "<br>";
 ?>
 <?php
 foreach($_SESSION['address'] as $key=>$value):
-?>
+    ?>
     <a href="../index.php?hid=<?=$key;?>"><?=$value;?></a>
 <?php
 endforeach;
@@ -120,15 +115,11 @@ endforeach;
         <option value="add_alrp">Добавить</option>
         <option value="edit_alrp">Редактировать</option>
         <option value="remove_alrp">Удалить</option>
+        <option value="open_door">Открыть дверь</option>
+        <option value="open_gate">Открыть ворота</option>
     </select>
     <input type="hidden" name="i_id" value="<?= $i_id; ?>">
-    <input type="text" name="lp" value="123Asd09">
-    <input type="text" name="customer_id" value="50">
-    <input type="text" name="group" value="2">
-    <input type="text" name="date_to" value="2026-08-30 23:59:59">
-    <input type="text" name="date_from" value="2026-08-30 00:00:00">
-    <input type="text" name="description" value="тестовый абон2">
-<!--    <input type="hidden" name="ts" value="2026-07-30 08:00:00">-->
-    <input type="submit" value="изменить номер">
+    <!--    <input type="hidden" name="ts" value="2026-07-30 08:00:00">-->
+    <input type="submit" value="открыть дверь">
 
 </form>

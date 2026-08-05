@@ -8,8 +8,8 @@ include "../includes/data.php";
 include "../includes/forpost.php";
 
 //TODO добавить проверку прав на все действия
-//TODO открытие двери и шлагбаума
 //TODO При добавлении и редактировании слать признак навсегда, если есть
+//TODO Выводить в ошибке key а не текст
 
 
 if(!isset($_POST['action'])){
@@ -101,6 +101,7 @@ elseif($_POST['action']=='get_alrp'){
         exit;
     }
     echo json_encode($get_alrp,JSON_UNESCAPED_UNICODE);
+    exit;
 
 }
 elseif($_POST['action']=='add_alrp'){
@@ -125,6 +126,7 @@ elseif($_POST['action']=='add_alrp'){
         exit;
     }
     echo json_encode($add_alrp,JSON_UNESCAPED_UNICODE);
+    exit;
 
 }
 elseif($_POST['action']=='edit_alrp'){
@@ -149,6 +151,7 @@ elseif($_POST['action']=='edit_alrp'){
         exit;
     }
     echo json_encode($edit_alrp,JSON_UNESCAPED_UNICODE);
+    exit;
 
 }
 
@@ -169,7 +172,57 @@ elseif($_POST['action']=='remove_alrp'){
         exit;
     }
     echo json_encode($remove_alrp,JSON_UNESCAPED_UNICODE);
+    exit;
 
 }
 
 //Конец блока номеров
+
+//Блок работы с клиентами и дверьми
+elseif($_POST['action']=='open_door'){
+    if($permitions['control_intercom']!==1){
+        echo json_encode(['result'=>'error','message'=>'Недостаточно прав'],JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    $data['i_id']=$_SESSION['current_camera']['id'];
+    $data['camera_model']=$_SESSION['current_camera']['camera_model'];
+    $data['camera_ip']=$_SESSION['current_camera']['camera_ip'];
+    $data['camera_login'] = $_SESSION['current_camera']['camera_login'];
+    $data['camera_password'] = $_SESSION['current_camera']['camera_password'];
+
+    $open_door=open_door($data);
+    if($open_door['result']=='error'){
+        echo json_encode(['result'=>'error','message'=>'Не удалось открыть'],JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    $data['action']='maindoor';
+    log_data($data);
+    echo json_encode($open_door,JSON_UNESCAPED_UNICODE);
+    exit;
+
+}
+//Блок работы с клиентами и дверьми
+elseif($_POST['action']=='open_gate'){
+    if($permitions['control_gate']!==1){
+        echo json_encode(['result'=>'error','message'=>'Недостаточно прав'],JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    $data['i_id']=$_SESSION['current_camera']['id'];
+    $data['camera_model']=$_SESSION['current_camera']['camera_model'];
+    $data['camera_ip']=$_SESSION['current_camera']['camera_ip'];
+    $data['camera_login'] = $_SESSION['current_camera']['camera_login'];
+    $data['camera_password'] = $_SESSION['current_camera']['camera_password'];
+
+    $open_gate=open_gate($data);
+    if($open_gate['result']=='error'){
+        echo json_encode(['result'=>'error','message'=>'Не удалось открыть'],JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    $data['action']='gate';
+    log_data($data);
+    echo json_encode($open_gate,JSON_UNESCAPED_UNICODE);
+    exit;
+
+}
+
+//Конец блока работы с клиентами и дверьми
