@@ -12,6 +12,20 @@ $events_dictionary = [ //коды событий домофонии
     "gate"=>9990
 
 ];
+
+$events_translate = [
+    126 => "move",
+    9999 => "open_door",
+    9990 => "open_gate",
+    9998 => "no_answer",
+    9997 => "answered",
+    9996 => "busy",
+    9993 => "rfid",
+    9992 => "code",
+    9991 => "person"
+];
+
+
 $lp_group = [
     1=>"temporary_lp",
     2=>"white_lp",

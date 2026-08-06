@@ -22,8 +22,8 @@ $role_dictionary = [
 $profiles = array("guest","internet","staff","unlimited");
 
 if($DEV_MODE){
-    $document_root = "http://" . $_SERVER['SERVER_NAME'] . "/dashboard"; // Полный путь до коневой папки
-    $BASE_PATH = $_SERVER["DOCUMENT_ROOT"] . '/dashboard'; // Использовать только для include или include_once
+    $document_root = "http://" . $_SERVER['SERVER_NAME'] . "/cctv_uhome"; // Полный путь до коневой папки
+    $BASE_PATH = $_SERVER["DOCUMENT_ROOT"] . '/cctv_uhome'; // Использовать только для include или include_once
 }
 else{
     // Полный путь до коневой папки

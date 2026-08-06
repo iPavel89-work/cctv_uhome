@@ -1,7 +1,16 @@
-<?php
-?>
-<div class="profile_icon">
-                        <a href="<?= $document_root; ?>/logout.php">
-                            <i class="bi bi-box-arrow-in-right text-danger">Выйти</i>
-                        </a>
-                    </div>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="<?= $document_root; ?>/assets/vis-timeline.js" defer></script>
+    <link rel="stylesheet" href="<?= $document_root; ?>/assets/index.css">
+</head>
+<body>
+
+<div class="wrapper">
+

@@ -36,7 +36,7 @@ function fp_archive_url($data){ //получаем ссылку на архив
     $session_id=$data['session_id'];
     $ts=$data['ts'];
     $tz='18000';
-    $format=$data['format']??"HLS";
+    $format=$data['format']??"H264";
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
@@ -82,7 +82,7 @@ function fp_online_url($data){ //получаем ссылку на онлайн
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => "SessionID=$session_id&CameraID=$camera_id&Format=HLS",
+        CURLOPT_POSTFIELDS => "SessionID=$session_id&CameraID=$camera_id&Format=H264",
     ));
 
     $response = curl_exec($curl);

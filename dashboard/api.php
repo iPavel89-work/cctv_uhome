@@ -28,7 +28,7 @@ if($_POST['action']=='get_archive'){ // прыжок по архиву и тай
     $data['camera_id']=$_SESSION['current_camera']['camera_id'];
     $data['session_id']=$_SESSION['current_camera']['session_id'];
     $data['ts'] =  $_POST['ts'];
-    $data['format']="HLS";
+    $data['format']="H264";
     $data['url']=$_SESSION['current_camera']['url'];
     $get_archive=fp_archive_url($data);
     if($get_archive['result']=='error'){
