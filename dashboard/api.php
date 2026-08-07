@@ -20,6 +20,8 @@ if(!isset($_POST['action'])){
 //echo "<br><br>";
 //echo json_encode($_SESSION,JSON_UNESCAPED_UNICODE);
 
+
+//Блок форпоста
 if($_POST['action']=='get_archive'){ // прыжок по архиву и таймлайну
     if($permitions['video_archive']!==1){
         echo json_encode(['result'=>'error','message'=>'Недостаточно прав']);
@@ -40,9 +42,22 @@ if($_POST['action']=='get_archive'){ // прыжок по архиву и тай
     echo json_encode($get_archive,JSON_UNESCAPED_UNICODE);
     exit;
 
+}
+elseif($_POST['action']=='check_records'){ // проверяем есть ли запись на дату
+    if($permitions['video_archive']!==1){
+        echo json_encode(['result'=>'error','message'=>'Недостаточно прав']);
+        exit;
+    }
+    $data['date'] =  $_POST['date'];
+    $get_records=fp_get_records($data);
+    if($get_records['result']=='error'){
+        echo json_encode(['result'=>'error','message'=>'Невозможно получить ссылку на архив'],JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    echo json_encode($get_records,JSON_UNESCAPED_UNICODE);
+    exit;
 
 }
-//Блок форпоста
 elseif($_POST['action']=='get_screen'){ //получение скрина
     if($permitions['video_archive']!==1){
         echo json_encode(['result'=>'error','message'=>'Недостаточно прав']);
@@ -87,6 +102,8 @@ elseif($_POST['action']=='download_archive'){ //скачка архива
     echo $get_archive['URL'];
     exit;
 }
+
+
 //Конец блока форпоста
 //Блок номеров
 elseif($_POST['action']=='get_alrp'){

@@ -83,8 +83,13 @@ if($fp_events['result']=='error'){
 
 
 if(isset($_GET['date'])){
-    $date = sanitize_text($_GET['date']);
-    $data['ts']= strtotime($date);
+    $data['date'] =$date;
+    $check_records = fp_get_records($data);
+    if(empty($check_records['records'])){
+        header('Location: ' . $document_root . '/dashboard/player.php?i_id='.$i_id.'&notice=incorrect');
+        exit;
+    }
+    $data['ts'] = strtotime( $check_records['records'][0]['CreationDate']);
     $get_translation_url = fp_archive_url($data);
 }
 else{

@@ -204,3 +204,41 @@ function fp_close_translation($data){ //закрываем трансляцию
     return $data; //в ответе URL это адрес трансляции
 
 }
+
+
+//получаем информацию, есть ли запись в этот день
+function fp_get_records($data){
+    $session_id = $_SESSION['current_camera']['session_id'];
+    $camera_id =$_SESSION['current_camera']['camera_id'];
+    $date = $data['date'];
+    $date_from = $date." 00:00:00";
+    $date_to = $date. "23:59:59";
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://cam.uhome.kz/api/GetRecords',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 5,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => "SessionID=$session_id&CameraID=$camera_id&From=$date_from&To=$date_to",
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    if(!$response){
+        $result=array("result"=>"error",'records'=>array());
+        return $result;
+    }
+    $response = json_decode($response, true);
+    if(isset($data['Error'])){
+        $result=array("result"=>"error",'records'=>array());
+        return $result;
+    }
+    $result['result']='success';
+    $result['records']=$response;
+    return $result; //в ответе массив с датами записи
+}

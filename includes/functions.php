@@ -317,7 +317,10 @@ function add_alrp($data){ //добавляем номер в бд
     $lp = $data['lp'];
     $customer_id = $data['customer_id'];
     $group = $data['group'];
-    $date_to=$data['date_to'];
+    $date_to = $data['date_to'];
+    if($group==2){
+        $date_to='2037-12-31 23:59:59';
+    }
     $date_from = $data['date_from'];
     $description = $data['description'];
     //данные камеры
@@ -407,7 +410,10 @@ function edit_alrp($data){
     $lp = $data['lp'];
     $customer_id = $data['customer_id'];
     $group = $data['group'];
-    $date_to=$data['date_to'];
+    $date_to = $data['date_to'];
+    if($group==2){
+        $date_to='2037-12-31 23:59:59';
+    }
     $date_from = $data['date_from'];
     $description = $data['description'];
     //данные камеры
