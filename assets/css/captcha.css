@@ -1,0 +1,28 @@
+
+cap-widget {
+    --cap-background: transparent;
+    --cap-border-color: var(--separator-color);
+    --cap-border-radius: 10px;
+    --cap-widget-height: 70px;
+    --cap-widget-width: 100%;
+    --cap-widget-padding: 16px;
+    --cap-gap: 15px;
+    --cap-color: var(--text-color-default);
+    --cap-checkbox-size: 24px;
+    --cap-checkbox-border: 1px solid transparent;
+    --cap-checkbox-border-radius: 4px;
+    --cap-checkbox-background: var(--bg-color-extra);
+    --cap-checkbox-margin: 2px;
+    --cap-font: "Inter", system, -apple-system, "BlinkMacSystemFont", ".SFNSText-Regular", "San Francisco",
+    "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", "Ubuntu", "arial", sans-serif;
+    --cap-spinner-color: var(--color-accent);
+    --cap-spinner-background-color: var(--text-color-light);
+    --cap-spinner-thickness: 5px;
+
+    --cap-checkmark: url("../assets/svg/check.svg");
+    --cap-error-cross: url("../assets/svg/check.svg");
+
+}
+.captcha p{
+    font-size: 20px;
+}

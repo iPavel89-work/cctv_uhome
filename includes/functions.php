@@ -329,7 +329,6 @@ function add_alrp($data){ //добавляем номер в бд
     $camera_password =$data['camera_password'];
     $auth = base64_encode($camera_login.":".$camera_password);
 
-
     $xml_data =  [
         '_attributes' => [
             'version' => '2.1.0',
@@ -390,6 +389,7 @@ function add_alrp($data){ //добавляем номер в бд
         $res['result']='error';
         return $res;
     }
+
     //добавляем в БД
     $sql = "insert into alrp set alrp = ?, cam_id = ?, customer_id = ?, description = ?, alrp_group = ?, date_to=?, date_from = ?";
     $params = array($lp,$i_id,$customer_id,$description,$group,$date_to,$date_from);

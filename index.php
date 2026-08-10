@@ -1,8 +1,8 @@
 <?php
 $ADMIN_PAGE = true;
-$PAGE = 'index';
-$PAGE_TITLE = 'Главная страница';
-$PAGE_TITLE_KEY = 'page_index_title';
+$PAGE = 'start';
+$PAGE_TITLE = 'Стартовая страница';
+$PAGE_TITLE_KEY = 'page_start_title';
 include "includes/base.php";
 include "includes/data.php";
 

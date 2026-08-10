@@ -1,18 +1,79 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<form action="login_control.php" method="post">
-    <input type="text" name="login" id="login">
-    <input type="password" name="password" id="password">
-    <input type="hidden" name="cap-token" id="cap-token" value="123">
-    <input type="submit" value="Login">
-</form>
-</body>
-</html>
+<?php
+$ADMIN_PAGE = true;
+$PAGE = 'auth';
+$PAGE_TITLE = 'Авторизация';
+$PAGE_TITLE_KEY = 'page_auth_title';
+include "../includes/base.php";
+include $BASE_PATH . "/parts/head.php";
+
+?>
+
+
+<div class="layout">
+    <div class="layout_menu">
+        <?php include $BASE_PATH . "/parts/sidebars/menu-left.php"; ?>
+    </div>
+    <div class="layout_inner">
+        <form class="card card-login" action="login_control.php" method="POST">
+            <div class="card_header">
+                <div class="card_img">
+                    <img src="https://hotspot.uhome.kz/assets/svg/uhome-mini.svg" alt="Logo">
+                </div>
+                <h1 class="card_title">Вход</h1>
+                <p class="card_desс text-small text-light">Введите логин и пароль для входа в панель управления</p>
+            </div>
+            <div class="card_inner">
+                <div class="form_line">
+                    <div class="input">
+                        <p class="input_title">Логин</p>
+                        <div class="input_inner">
+                            <input type="text" class="input_field" name="login" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form_line">
+                    <div class="input">
+                        <p class="input_title">Пароль</p>
+                        <div class="input_inner">
+                            <input type="text" class="input_field" name="password" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form_line">
+                    <script src="https://captcha.uhome.kz/assets/widget.js"></script>
+                    <cap-widget id="cap" data-cap-api-endpoint="https://captcha.uhome.kz/21e58db659/" data-cap-i18n-verifying-label="Подождите..." data-cap-i18n-initial-state="Я не робот" data-cap-i18n-solved-label="Проверка пройдена" data-cap-i18n-error-label="Ошибка" data-cap-i18n-wasm-disabled="Enable WASM for significantly faster solving"><input type="hidden" name="cap-token"></cap-widget>
+                    <input type="hidden" name="cap-token" id="cap-token" value="123">
+                </div>
+
+            </div>
+            <div class="card_actions">
+                <button type="submit" class="btn btn-accent btn-full btn-xl" data-translate="page_login_form_btn_submit">Войти</button>
+            </div>
+        </form>
+    </div>
+    <div class="layout_menu">
+        <?php include $BASE_PATH . "/parts/sidebars/menu-right.php"; ?>
+    </div>
+</div>
+
+
+<script>
+    let CAP_TOKEN;
+    window.CAP_CUSTOM_WASM_URL = "https://captcha.uhome.kz/assets/cap_wasm.js";
+    const widget = document.querySelector("#cap");
+    document.querySelector("button[type='submit']").disabled = true;
+    // При решении CAPTCHA получаем токен
+    widget.addEventListener("solve", (e) => {
+        const token = e.detail.token;
+        CAP_TOKEN = token;
+        document.querySelector("button[type='submit']").disabled = false;
+    });
+
+</script>
+
+
+<?php
+include $BASE_PATH . "/parts/footer.php";
+?>
