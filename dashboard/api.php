@@ -119,8 +119,8 @@ elseif($_POST['action']=='add_alrp'){
     $data['camera_ip']=$_SESSION['current_camera']['camera_ip'];
     $data['camera_login'] = $_SESSION['current_camera']['camera_login'];
     $data['camera_password'] = $_SESSION['current_camera']['camera_password'];
-    $add_alrp=add_alrp($data);
 
+    $add_alrp=add_alrp($data);
     if($add_alrp['result']=='error'){
         echo json_encode(['result'=>'error','message'=>'Не удалось добавить номер'],JSON_UNESCAPED_UNICODE);
         exit;
@@ -138,8 +138,8 @@ elseif($_POST['action']=='edit_alrp'){
     $data['lp'] = sanitize_text($_POST['lp']);
     $data['customer_id'] = sanitize_text($_POST['customer_id']);
     $data['group'] = sanitize_text($_POST['group']);
-    $data['date_to']=sanitize_text($_POST['date_to']);
-    $data['date_from'] = sanitize_text($_POST['date_from']);
+    $data['date_to']=date('Y-m-d H:i:s',strtotime($_POST['date_to']));
+    $data['date_from'] = date('Y-m-d H:i:s',strtotime($_POST['date_from']));
     $data['description'] = sanitize_text($_POST['description']);
     $data['camera_ip']=$_SESSION['current_camera']['camera_ip'];
     $data['camera_login'] = $_SESSION['current_camera']['camera_login'];

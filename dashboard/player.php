@@ -244,38 +244,35 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                     </div>
                     <div class="widget_content">
                         <div class="widget_buttons">
-                            <?php if ($_SESSION['current_camera']['type'] == 'gate'): ?>
 
-                                <button class="btn btn-circle" type="button" data-modal-btn="video_date">
+                            <button class="btn btn-circle" type="button" data-modal-btn="video_date">
+                                <span class="btn-circle_icon">
+                                    <i class="bi bi-calendar"></i>
+                                </span>
+                                    <span class="btn-circle_text">
+                                    Изменить дату
+                                </span>
+                            </button>
+
+                            <?php if ($permitions['video_download']): ?>
+                                <button class="btn btn-circle" type="button" data-modal-btn="video_download">
                                     <span class="btn-circle_icon">
-                                        <i class="bi bi-calendar"></i>
+                                        <i class="bi bi-cloud-download"></i>
                                     </span>
                                         <span class="btn-circle_text">
-                                        Изменить дату
+                                        Скачать видео
                                     </span>
                                 </button>
-
-                                <?php if ($permitions['video_download']): ?>
-                                    <button class="btn btn-circle" type="button" data-modal-btn="video_download">
-                                        <span class="btn-circle_icon">
-                                            <i class="bi bi-cloud-download"></i>
-                                        </span>
-                                            <span class="btn-circle_text">
-                                            Скачать видео
-                                        </span>
-                                    </button>
-                                <?php endif; ?>
-
-                                <button class="btn btn-circle" type="button" onclick="takeVideoScreenshot()">
-                                    <span class="btn-circle_icon">
-                                        <i class="bi bi-card-image"></i>
-                                    </span>
-                                        <span class="btn-circle_text">
-                                        Сделать скриншот
-                                    </span>
-                                </button>
-
                             <?php endif; ?>
+
+                            <button class="btn btn-circle" type="button" onclick="takeVideoScreenshot()">
+                                <span class="btn-circle_icon">
+                                    <i class="bi bi-card-image"></i>
+                                </span>
+                                    <span class="btn-circle_text">
+                                    Сделать скриншот
+                                </span>
+                            </button>
 
                         </div>
                     </div>
@@ -566,6 +563,10 @@ if ($camera_type === "gate") {
 
     if ($permitions['lp_view']) {
         include $BASE_PATH . '/parts/modals/lp_list.php';
+    }
+
+    if ($permitions['lp_edit']) {
+        include $BASE_PATH . '/parts/modals/lp_edit.php';
     }
 }
 

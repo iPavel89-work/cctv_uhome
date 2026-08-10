@@ -91,12 +91,12 @@
     margin-top: 8px;
     font-size: 12px;
     color: var(--text-color-light);
-    max-width: 60%;
+    max-width: 70%;
 }
 
 @media (min-width: 768px) {
     .modal {
-        max-width: 360px;
+        max-width: 380px;
     }
 }
 
@@ -140,6 +140,8 @@
     flex-grow: 1;
     background-color: var(--bg-color-base);
     overflow: hidden;
+
+    will-change: box-shadow;
 }
 
 .modal-right .modal_inner {

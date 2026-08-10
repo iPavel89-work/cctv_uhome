@@ -1,19 +1,19 @@
-<div class="modal-overlay" data-modal="lp_add">
+<div class="modal-overlay" data-modal="lp_edit">
     <form action="api.php" method="POST" class="modal modal-side modal-right">
         <div class="modal_inner">
             <div class="modal_header">
-                <h2 class="modal_title">Новое ТС</h2>
+                <h2 class="modal_title">Редактирование ТС</h2>
                 <div class="modal_desc">
-                    Выберите список, в который будет добавлено новое транспортное средство
+                    Изменение данных транспортного средства
                 </div>
-                <div class="modal_close" data-modal-close="lp_add">
+                <div class="modal_close" data-modal-close="lp_edit">
                     <i class="bi bi-x-lg"></i>
                 </div>
             </div>
             <div class="modal_section">
                 <div class="checkboxes-horizontal">
                     <label class="checkbox checkbox-text">
-                        <input type="radio" name="group" value="2" class="checkbox_input" checked data-js-alrp-group-checkbox>
+                        <input type="radio" name="group" value="2" class="checkbox_input" data-js-alrp-group-checkbox>
                         <span class="checkbox_text">Разрешённый список</span>
                     </label>
 
@@ -33,15 +33,12 @@
                             Номер ТС
                         </div>
                         <div class="input_inner">
-                            <input type="text" class="input_field" name="lp">
+                            <input type="text" class="input_field" name="lp" readonly>
                             <div class="input_section">
                                 <p class="text-danger text-small">
-                                    Без пробелов!
+                                    Не изменяется!
                                 </p>
                             </div>
-                        </div>
-                        <div class="input_notice">
-                            <p class="text-small text-light">Номер считывается слева направо, формат: 123ABC09</p>
                         </div>
                     </div>
                 </div>
@@ -99,8 +96,8 @@
         </div>
 
         <div class="modal_actions">
-            <input type="hidden" name="action" value="add_alrp">
-            <button type="submit" class="btn btn-modal btn-accent btn-full">Добавить ТС</button>
+            <input type="hidden" name="action" value="edit_alrp">
+            <button type="submit" class="btn btn-modal btn-accent btn-full">Изменить</button>
         </div>
     </form>
 </div>
@@ -120,5 +117,11 @@
         });
     })
 </script>
+
+<!--<form action="api.php" method="post">-->
+<!--    <input type="hidden" name="action" value="remove_alrp">-->
+<!--    <input type="hidden" name="lp" value="--><?php //= htmlspecialchars($value["alrp"]) ?><!--">-->
+<!--    <button type="submit">Удалить</button>-->
+<!--</form>-->
 
 

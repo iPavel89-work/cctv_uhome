@@ -347,6 +347,8 @@ h6,
     font-weight: 400;
 }
 
+
+
 .btns-horizontal {
     display: flex;
     align-items: center;
@@ -358,6 +360,7 @@ h6,
     padding: 0;
     vertical-align: middle;
 }
+
 
 .btn-hamburger {
     position: fixed;
@@ -936,13 +939,29 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     color: var(--text-color-default);
 }
 
+.checkbox-pill {
+
+}
+
+.checkbox-pill .checkbox_text {
+    border: 1px solid var(--bg-color-extra);
+    color: var(--text-color-default);
+    background-color: var(--bg-color-extra);
+    padding: 4px 16px;
+    border-radius: 36px;
+    font-size: 14px;
+}
+.checkbox-pill .checkbox_input:checked ~ .checkbox_text {
+    background-color: var(--bg-color-base);
+}
+
 /* CHECKBOXES-HORIZONTAL */
 .checkboxes-horizontal {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 16px;
-    overflow: auto;
+    overflow-x: auto;
     width: 100%;
     max-width: 100%;
     text-overflow: ellipsis;
@@ -1696,5 +1715,29 @@ video {
 
 
 
+/* LP LIST */
+.lp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.lp {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lp_number {
+    border: 1px solid var(--text-color-default);
+    font-size: 14px;
+    padding: 2px 10px;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.lp_actions {
+    margin-left: auto;
+}
+/* LP LIST */
 
 

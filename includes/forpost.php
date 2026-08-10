@@ -212,7 +212,7 @@ function fp_get_records($data){
     $camera_id =$_SESSION['current_camera']['camera_id'];
     $date = $data['date'];
     $date_from = $date." 00:00:00";
-    $date_to = $date. "23:59:59";
+    $date_to = $date. " 23:59:59";
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => 'https://cam.uhome.kz/api/GetRecords',

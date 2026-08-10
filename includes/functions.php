@@ -328,7 +328,6 @@ function add_alrp($data){ //добавляем номер в бд
     $camera_login =$data['camera_login'];
     $camera_password =$data['camera_password'];
     $auth = base64_encode($camera_login.":".$camera_password);
-
     $xml_data =  [
         '_attributes' => [
             'version' => '2.1.0',
