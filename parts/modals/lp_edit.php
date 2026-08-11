@@ -1,5 +1,5 @@
 <div class="modal-overlay" data-modal="lp_edit">
-    <form action="api.php" method="POST" class="modal modal-side modal-right">
+    <form action="<?= $document_root; ?>/dashboard/api.php" method="POST" class="modal modal-side modal-right" data-js-form-fetch="lp_edit">
         <div class="modal_inner">
             <div class="modal_header">
                 <h2 class="modal_title">Редактирование ТС</h2>

@@ -39,6 +39,7 @@ if (!empty($ERROR_CODE) && isset($PAGE_ERRORS[$ERROR_CODE])) {
     <script src="<?= $document_root; ?>/assets/js/index.js" defer></script>
     <script src="<?= $document_root; ?>/assets/js/translations.js" defer></script>
     <script src="<?= $document_root; ?>/assets/js/translate.js" defer></script>
+    <script src="<?= $document_root; ?>/assets/js/fetch.js" defer></script>
 
 <!--    <link rel="prefetch" href="https://cdn.jsdelivr.net/npm/@cap.js/wasm@0.0.6/browser/cap_wasm.min.js" as="script">-->
 <!--    <link rel="prefetch" href="https://cdn.jsdelivr.net/npm/@cap.js/wasm@0.0.6/browser/cap_wasm_bg.wasm" as="fetch">-->

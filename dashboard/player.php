@@ -30,6 +30,7 @@ if (array_key_exists($i_id, $_SESSION['data']['intercom'])) {
     $_SESSION['current_camera']['id'] = $i_id;
     $_SESSION['current_camera']['type'] = 'intercom';
     $camera_data = $_SESSION['data']['intercom'][$i_id];
+
     $camera_type = "intercom";
 }
 if (array_key_exists($i_id, $_SESSION['data']['camera'])) {
@@ -56,6 +57,7 @@ $_SESSION['current_camera']['camera_id'] = $camera_data['cameraID'];
 $_SESSION['current_camera']['camera_ip'] = $camera_data['camera_ip'];
 $_SESSION['current_camera']['camera_login'] = $camera_data['camera_login'];
 $_SESSION['current_camera']['camera_password'] = $camera_data['camera_password'];
+$_SESSION['current_camera']['camera_model'] = $camera_data['camera_model'];
 
 if ($permitions['video_events']) {
     $data['session_id'] = $fp_session_id;
@@ -159,7 +161,7 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                                 <i class="bi bi-calendar"></i>
                                 <span>Выбрать дату</span>
                             </button>
-                            <button type="button" class="btn btn-text btn-accent" onclick="takeFlvScreenshot()">
+                            <button type="button" class="btn btn-text btn-accent" onclick="takeVideoScreenshot()">
                                 <i class="bi bi-image"></i>
                                 <span>Сделать скриншот</span>
                             </button>
@@ -188,18 +190,22 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                             <div class="widget_buttons">
                                 <?php if ($_SESSION['current_camera']['type'] == 'gate'): ?>
 
-                                    <?php if ($permitions['control_gate']): ?>
-                                        <button class="btn btn-circle" type="button">
-                                        <span class="btn-circle_icon">
-                                            <i class="bi bi-door-open"></i>
-                                        </span>
-                                            <span class="btn-circle_text">
-                                            Открыть шлагбаум
-                                        </span>
-                                        </button>
+                                    <?php if($permitions['control_gate'] === 1): ?>
+                                        <form action="<?= $document_root; ?>/dashboard/api.php" data-js-form-fetch="intercom_open" method="POST">
+                                            <input type="hidden" name="action" value="open_gate">
+                                            <button class="btn btn-circle" type="submit">
+                                                <span class="btn-circle_icon">
+                                                <i class="bi bi-door-open"></i>
+                                            </span>
+                                                <span class="btn-circle_text">
+                                                    Открыть шлагбаум
+                                                </span>
+                                            </button>
+                                        </form>
                                     <?php endif; ?>
 
-                                    <?php if ($permitions['lp_view']): ?>
+
+                                    <?php if ($permitions['lp_view'] === 1): ?>
                                         <button class="btn btn-circle" type="button" data-modal-btn="lp_list">
                                         <span class="btn-circle_icon">
                                             <i class="bi bi-card-checklist"></i>
@@ -210,7 +216,7 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                                         </button>
                                     <?php endif; ?>
 
-                                    <?php if ($permitions['lp_add']): ?>
+                                    <?php if ($permitions['lp_add'] === 1): ?>
                                         <button class="btn btn-circle" type="button" data-modal-btn="lp_add">
                                         <span class="btn-circle_icon">
                                             <i class="bi bi-plus-lg"></i>
@@ -224,37 +230,44 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                                 <?php endif; ?>
 
                                 <?php if ($_SESSION['current_camera']['type'] == 'intercom'): ?>
-                                    <button class="btn btn-circle" type="button">
-                                    <span class="btn-circle_icon">
-                                        <i class="bi bi-door-open"></i>
-                                    </span>
-                                        <span class="btn-circle_text">
-                                        Открыть двери
-                                    </span>
-                                    </button>
+                                    <?php if($permitions['control_intercom'] === 1): ?>
+                                        <form action="<?= $document_root; ?>/dashboard/api.php" data-js-form-fetch="intercom_open" method="POST">
+                                            <input type="hidden" name="action" value="open_door">
+                                            <button class="btn btn-circle" type="submit">
+                                                <span class="btn-circle_icon">
+                                                    <i class="bi bi-door-open"></i>
+                                                </span>
+                                                <span class="btn-circle_text">
+                                                    Открыть домофон
+                                                </span>
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 <?php endif; ?>
 
-                <div class="widget widget-controls">
+                <div class="widget widget-controls hide-desktop">
                     <div class="widget_title">
                         Действия
                     </div>
                     <div class="widget_content">
                         <div class="widget_buttons">
 
-                            <button class="btn btn-circle" type="button" data-modal-btn="video_date">
-                                <span class="btn-circle_icon">
-                                    <i class="bi bi-calendar"></i>
-                                </span>
-                                    <span class="btn-circle_text">
-                                    Изменить дату
-                                </span>
-                            </button>
+                            <?php if ($permitions['video_archive'] === 1): ?>
+                                <button class="btn btn-circle" type="button" data-modal-btn="video_date">
+                                    <span class="btn-circle_icon">
+                                        <i class="bi bi-calendar"></i>
+                                    </span>
+                                        <span class="btn-circle_text">
+                                        Изменить дату
+                                    </span>
+                                </button>
+                            <?php endif; ?>
 
-                            <?php if ($permitions['video_download']): ?>
+                            <?php if ($permitions['video_download'] === 1): ?>
                                 <button class="btn btn-circle" type="button" data-modal-btn="video_download">
                                     <span class="btn-circle_icon">
                                         <i class="bi bi-cloud-download"></i>

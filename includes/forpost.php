@@ -109,6 +109,9 @@ function fp_download_url($data){ //Получение ссылки на скач
     $ts=$data['ts'];
     $tz='18000';
     $duration = $data['duration']; //Продолжительность записи в минутах
+    if($data['duration'] >30){
+        $duration = "30";
+    }
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => 'https://cam.uhome.kz/api/GetDownloadURL',
@@ -129,13 +132,13 @@ function fp_download_url($data){ //Получение ссылки на скач
         $data['result']='error';
         return $data;
     }
-    $data = json_decode($response, true);
-    if(isset($data['Error'])){
-        $data['result']='error';
-        return $data;
+    $result = json_decode($response, true);
+    if(isset($result['Error'])){
+        $result['result']='error';
+        return $result;
     }
-    $data['result']='success';
-    return $data; //в ответе URL это адрес трансляции
+    $result['result']='success';
+    return $result; //в ответе URL это адрес трансляции
 }
 
 

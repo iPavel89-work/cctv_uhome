@@ -1310,6 +1310,14 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     }
 }
 
+@media screen and (min-width: 1201px) {
+    .hide-desktop {
+        display: none !important;
+    }
+}
+
+
+
 /*UTILS*/
 
 
@@ -1733,9 +1741,18 @@ video {
     padding: 2px 10px;
     font-weight: bold;
     border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.lp_customer {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .lp_actions {
+    flex-shrink: 0;
     margin-left: auto;
 }
 /* LP LIST */

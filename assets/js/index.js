@@ -26,14 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
         SIDEBAR_BUTTONS.forEach(button => {
             button.addEventListener("click", () => {
                 const target = document.querySelector(`[data-sidebar-toggle="${button.dataset.sidebarToggleBtn}"]`);
-                if(target) {
+                if (target) {
                     target.classList.toggle("isHide");
                 }
             });
         });
     }
-
-
-
 
 })

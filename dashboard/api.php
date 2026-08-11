@@ -72,8 +72,8 @@ elseif($_POST['action']=='download_archive'){ //скачка архива
     }
     $data['camera_id']=$_SESSION['current_camera']['camera_id'];
     $data['session_id']=$_SESSION['current_camera']['session_id'];
-    $data['ts'] =  $_POST['ts'];
-    $data['duration']="2";
+    $data['ts'] =  strtotime($_POST['ts']);
+    $data['duration']=$_POST['duration'];
     $data['url']=$_SESSION['current_camera']['url'];
     $get_archive=fp_download_url($data);
     if($get_archive['result']=='error'){
@@ -82,9 +82,8 @@ elseif($_POST['action']=='download_archive'){ //скачка архива
     }
     fp_close_translation($data);
     $_SESSION['current_camera']['url'] =  $get_archive['URL'];
+
     echo json_encode($get_archive,JSON_UNESCAPED_UNICODE);
-    echo "<br>";
-    echo $get_archive['URL'];
     exit;
 }
 //Конец блока форпоста
@@ -189,7 +188,6 @@ elseif($_POST['action']=='open_door'){
     $data['camera_ip']=$_SESSION['current_camera']['camera_ip'];
     $data['camera_login'] = $_SESSION['current_camera']['camera_login'];
     $data['camera_password'] = $_SESSION['current_camera']['camera_password'];
-
     $open_door=open_door($data);
     if($open_door['result']=='error'){
         echo json_encode(['result'=>'error','message'=>'Не удалось открыть'],JSON_UNESCAPED_UNICODE);

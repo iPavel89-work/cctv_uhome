@@ -68,7 +68,42 @@ function takeVideoScreenshot(id = 'video') {
     link.click();
 }
 
+async function QUERY_API(formElement) {
+    // const controller = new AbortController();
+    // const timeoutId = setTimeout(() => controller.abort(), 8000);
 
+    try {
+        const response = await fetch(formElement.getAttribute('action') || '/', {
+            method: formElement.getAttribute('method') || 'POST',
+            body: new FormData(formElement),
+            mode: 'no-cors'
+            // signal: controller.signal
+        });
+
+        // clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            throw new Error(`Код ответа: ${response.status}`);
+        }
+
+        // const contentType = response.headers.get('content-type');
+        // if (!contentType || !contentType.includes('application/json')) {
+        //     throw new TypeError('Сервер вернул не JSON');
+        // }
+
+        const data = await response.json();
+        return { success: true, data }; // Возвращаем успешный результат
+
+    } catch (error) {
+        let errorMessage = error.message;
+        if (error.name === 'AbortError') errorMessage = 'Превышено время ожидания ответа';
+
+        return { success: false, error: errorMessage }; // Возвращаем ошибку
+
+    } finally {
+
+    }
+}
 
 
 // TOAST

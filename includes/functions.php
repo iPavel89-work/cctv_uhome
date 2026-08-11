@@ -662,6 +662,7 @@ function open_door($data){
     $camera_model =$data['camera_model'];
     $auth = base64_encode($camera_login.":".$camera_password);
     include "models/".$camera_model.".php";
+    return $response_data;
 
 }
 function open_gate($data){

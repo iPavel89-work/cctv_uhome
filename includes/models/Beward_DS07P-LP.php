@@ -16,9 +16,11 @@ curl_setopt_array($curl, array(
 ));
 
 $response = curl_exec($curl);
-
 curl_close($curl);
 $response = trim($response);
 if ($response == "OK") {
-    echo '{"result":"success"}';
+    $response_data =  array('result' => 'success');
+}
+else{
+    $response_data =  array('result' => 'error');
 }
