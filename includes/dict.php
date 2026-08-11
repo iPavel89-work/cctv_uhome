@@ -9,20 +9,24 @@ $events_dictionary = [ //коды событий домофонии
     "RFID"=>9993,
     "CODE"=>9992,
     "person"=>9991,
-    "gate"=>9990
+    "gate"=>9990,
+    "tmp_lp"=>9989,
+    "white_lp"=>9988
 
 ];
 
 $events_translate = [
     126 => "move",
     9999 => "open_door",
-    9990 => "open_gate",
     9998 => "no_answer",
     9997 => "answered",
     9996 => "busy",
     9993 => "rfid",
     9992 => "code",
-    9991 => "person"
+    9991 => "person",
+    9990 => "open_gate",
+    9989 => "tmp_lp",
+    9988 => "white_lp"
 ];
 
 
