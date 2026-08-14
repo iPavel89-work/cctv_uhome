@@ -2,7 +2,7 @@
     <div class="modal modal-side modal-right">
         <div class="modal_inner">
             <div class="modal_header">
-                <h2 class="modal_title">Выберите адрес</h2>
+                <h2 class="modal_title" data-translate="modal_address_title"></h2>
                 <div class="modal_close" data-modal-close="addresses">
                     <i class="bi bi-x-lg"></i>
                 </div>

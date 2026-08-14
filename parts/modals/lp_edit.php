@@ -2,10 +2,8 @@
     <form action="<?= $document_root; ?>/dashboard/api.php" method="POST" class="modal modal-side modal-right" data-js-form-fetch="lp_edit">
         <div class="modal_inner">
             <div class="modal_header">
-                <h2 class="modal_title">Редактирование ТС</h2>
-                <div class="modal_desc">
-                    Изменение данных транспортного средства
-                </div>
+                <h2 class="modal_title" data-translate="modal_lpedit_title"></h2>
+                <div class="modal_desc" data-translate="modal_lpedit_desc"></div>
                 <div class="modal_close" data-modal-close="lp_edit">
                     <i class="bi bi-x-lg"></i>
                 </div>
@@ -14,12 +12,12 @@
                 <div class="checkboxes-horizontal">
                     <label class="checkbox checkbox-text">
                         <input type="radio" name="group" value="2" class="checkbox_input" data-js-alrp-group-checkbox>
-                        <span class="checkbox_text">Разрешённый список</span>
+                        <span class="checkbox_text" data-translate="lptype_wl"></span>
                     </label>
 
                     <label class="checkbox checkbox-text">
                         <input type="radio" name="group" value="1" class="checkbox_input" data-js-alrp-group-checkbox>
-                        <span class="checkbox_text">Временный список</span>
+                        <span class="checkbox_text" data-translate="lptype_tl"></span>
                     </label>
                 </div>
 
@@ -29,14 +27,12 @@
 
                 <div class="form_line">
                     <div class="input">
-                        <div class="input_title">
-                            Номер ТС
+                        <div class="input_title" data-translate="modal_lpedit_input_number_title">
                         </div>
                         <div class="input_inner">
                             <input type="text" class="input_field" name="lp" readonly>
                             <div class="input_section">
-                                <p class="text-danger text-small">
-                                    Не изменяется!
+                                <p class="text-danger text-small" data-translate="modal_lpedit_input_number_notice">
                                 </p>
                             </div>
                         </div>
@@ -45,8 +41,7 @@
 
                 <div class="form_line">
                     <div class="input">
-                        <div class="input_title">
-                            ФИО
+                        <div class="input_title" data-translate="modal_lpedit_input_description_title">
                         </div>
                         <div class="input_inner">
                             <input type="text" class="input_field" name="description">
@@ -56,8 +51,7 @@
 
                 <div class="form_line">
                     <div class="select">
-                        <div class="select_title">
-                            Квартира:
+                        <div class="select_title" data-translate="modal_lpedit_input_flat_title">
                         </div>
                         <div class="select_inner">
                             <select name="customer_id" class="select_field">
@@ -71,8 +65,7 @@
 
                 <div class="form_line d-none" data-js-alrp-group-date>
                     <div class="input">
-                        <div class="input_title">
-                            Дата начала
+                        <div class="input_title" data-translate="modal_lpedit_input_date_from_title">
                         </div>
                         <div class="input_inner">
                             <input type="datetime-local" class="input_field" name="date_from" value="<?= date('Y-m-d\TH:i'); ?>">
@@ -82,8 +75,7 @@
 
                 <div class="form_line d-none" data-js-alrp-group-date>
                     <div class="input">
-                        <div class="input_title">
-                            Дата конца
+                        <div class="input_title" data-translate="modal_lpedit_input_date_to_title">
                         </div>
                         <div class="input_inner">
                             <input type="datetime-local" class="input_field" name="date_to" value="<?= date('Y-m-d\TH:i', strtotime('+1 day') ); ?>" >
@@ -97,7 +89,7 @@
 
         <div class="modal_actions">
             <input type="hidden" name="action" value="edit_alrp">
-            <button type="submit" class="btn btn-modal btn-accent btn-full">Изменить</button>
+            <button type="submit" class="btn btn-modal btn-danger btn-full" data-translate="modal_lpedit_button_submit"></button>
         </div>
     </form>
 </div>

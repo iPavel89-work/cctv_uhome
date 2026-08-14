@@ -1,11 +1,9 @@
 <?php
-$ADMIN_PAGE = true;
-$PAGE = 'auth';
-$PAGE_TITLE = 'Авторизация';
-$PAGE_TITLE_KEY = 'page_auth_title';
-include "../includes/base.php";
-include $BASE_PATH . "/parts/head.php";
-
+    $PAGE = 'auth';
+    $PAGE_TITLE = 'Авторизация';
+    $PAGE_TITLE_KEY = 'page_auth_title';
+    include "../includes/base.php";
+    include $BASE_PATH . "/parts/head.php";
 ?>
 
 
@@ -19,13 +17,13 @@ include $BASE_PATH . "/parts/head.php";
                 <div class="card_img">
                     <img src="https://hotspot.uhome.kz/assets/svg/uhome-mini.svg" alt="Logo">
                 </div>
-                <h1 class="card_title">Вход</h1>
-                <p class="card_desс text-small text-light">Введите логин и пароль для входа в панель управления</p>
+                <h1 class="card_title" data-translate="page_auth_card_title"></h1>
+                <p class="card_desс text-small text-light" data-translate="page_auth_card_desc"></p>
             </div>
             <div class="card_inner">
                 <div class="form_line">
                     <div class="input">
-                        <p class="input_title">Логин</p>
+                        <p class="input_title" data-translate="auth_form_input_login_title"></p>
                         <div class="input_inner">
                             <input type="text" class="input_field" name="login" required>
                         </div>
@@ -34,7 +32,7 @@ include $BASE_PATH . "/parts/head.php";
 
                 <div class="form_line">
                     <div class="input">
-                        <p class="input_title">Пароль</p>
+                        <p class="input_title" data-translate="auth_form_input_password_title"></p>
                         <div class="input_inner">
                             <input type="text" class="input_field" name="password" required>
                         </div>
@@ -42,14 +40,13 @@ include $BASE_PATH . "/parts/head.php";
                 </div>
 
                 <div class="form_line">
-                    <script src="https://captcha.uhome.kz/assets/widget.js"></script>
-                    <cap-widget id="cap" data-cap-api-endpoint="https://captcha.uhome.kz/21e58db659/" data-cap-i18n-verifying-label="Подождите..." data-cap-i18n-initial-state="Я не робот" data-cap-i18n-solved-label="Проверка пройдена" data-cap-i18n-error-label="Ошибка" data-cap-i18n-wasm-disabled="Enable WASM for significantly faster solving"><input type="hidden" name="cap-token"></cap-widget>
-                    <input type="hidden" name="cap-token" id="cap-token" value="123">
+                    <cap-widget id="cap" data-cap-api-endpoint="https://captcha.uhome.kz/21e58db659/" data-cap-i18n-verifying-label="Подождите..." data-cap-i18n-initial-state="Я не робот" data-cap-i18n-solved-label="Проверка пройдена" data-cap-i18n-error-label="Ошибка" data-cap-i18n-wasm-disabled="Enable WASM for significantly faster solving"></cap-widget>
                 </div>
+
 
             </div>
             <div class="card_actions">
-                <button type="submit" class="btn btn-accent btn-full btn-xl" data-translate="page_login_form_btn_submit">Войти</button>
+                <button type="submit" class="btn btn-accent btn-full btn-xl" data-translate="auth_form_button_submit"></button>
             </div>
         </form>
     </div>
@@ -58,21 +55,7 @@ include $BASE_PATH . "/parts/head.php";
     </div>
 </div>
 
-
-<script>
-    let CAP_TOKEN;
-    window.CAP_CUSTOM_WASM_URL = "https://captcha.uhome.kz/assets/cap_wasm.js";
-    const widget = document.querySelector("#cap");
-    document.querySelector("button[type='submit']").disabled = true;
-    // При решении CAPTCHA получаем токен
-    widget.addEventListener("solve", (e) => {
-        const token = e.detail.token;
-        CAP_TOKEN = token;
-        document.querySelector("button[type='submit']").disabled = false;
-    });
-
-</script>
-
+<script src="https://captcha.uhome.kz/assets/widget.js"></script>
 
 <?php
 include $BASE_PATH . "/parts/footer.php";

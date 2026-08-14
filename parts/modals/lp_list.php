@@ -2,8 +2,8 @@
     <div class="modal modal-side modal-right">
         <div class="modal_inner">
             <div class="modal_header">
-                <h2 class="modal_title">Список ТС</h2>
-                <p class="modal_desc">Номера транспортных средств, имеющих доступ к автоматическому открытию шлагбаума</p>
+                <h2 class="modal_title" data-translate="modal_lplist_title"></h2>
+                <p class="modal_desc" data-translate="modal_lplist_desc"></p>
 
                 <div class="modal_close" data-modal-close="lp_list">
                     <i class="bi bi-x-lg"></i>
@@ -12,7 +12,7 @@
             <div class="modal_section pb-3">
                 <button class="btn btn-text btn-accent" type="button" data-modal-btn="lp_add">
                     <i class="bi bi-plus-lg"></i>
-                    <span>Добавить ТС</span>
+                    <span data-translate="modal_lplist_button_add"></span>
                 </button>
             </div>
             <div class="modal_separator"></div>
@@ -22,31 +22,57 @@
                         <label class="checkbox checkbox-pill">
                             <input type="radio" name="lp_types" class="checkbox_input" data-filter="all" data-filter-target="lp_types"
                                    checked/>
-                            <span class="checkbox_text">Все</span>
+                            <span class="checkbox_text" data-translate="lptype_all"></span>
                         </label>
-                        <?php foreach ($lp_types as $value): ?>
+
+                        <?php if(in_array('2', $lp_types)): ?>
                             <label class="checkbox checkbox-pill">
-                                <input type="radio" name="lp_types" class="checkbox_input" data-filter="<?= $value; ?>"
+                                <input type="radio" name="lp_types" class="checkbox_input" data-filter="2"
                                        data-filter-target="lp_types"/>
-                                <span class="checkbox_text"><?= $value == 2 ? 'Постоянные' : 'Временные'; ?> </span>
+                                <span class="checkbox_text" data-translate="lptype_wl_short"></span>
                             </label>
-                        <?php endforeach; ?>
+                        <?php endif; ?>
+
+                        <?php if(in_array('1', $lp_types)): ?>
+                            <label class="checkbox checkbox-pill">
+                                <input type="radio" name="lp_types" class="checkbox_input" data-filter="1"
+                                       data-filter-target="lp_types"/>
+                                <span class="checkbox_text" data-translate="lptype_tl_short"> </span>
+                            </label>
+                        <?php endif; ?>
+
                     </div>
                 </div>
             <?php endif; ?>
+
+            <?php if (!empty($get_alrp)): ?>
+            <div class="modal_section">
+                <div class="input flex-grow-1">
+                    <div class="input_inner">
+                        <div class="input_icon">
+                            <i class="bi bi-search"></i>
+                        </div>
+                        <input type="text" class="input_field" name="search" data-search="alrp">
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+
             <div class="modal_content">
 
                 <?php if (empty($get_alrp)): ?>
-                    <p class="text-small text-light">Нет номеров</p>
+                    <p class="text-light" data-translate="modal_lplist_placeholder"></p>
                 <?php endif; ?>
 
                 <?php if (!empty($get_alrp)): ?>
 
+
                     <div class="lp-list" data-filter-content="lp_types">
                         <?php foreach ($get_alrp as $key => $value): ?>
-                            <div class="lp" data-filter-type="<?= $value["alrp_group"]; ?>">
+                            <div class="lp" data-filter-type="<?= $value["alrp_group"]; ?>" data-search-row="alrp">
                                 <p class="lp_number">
-                                    <?= htmlspecialchars($value["alrp"]); ?>
+                                    <?php $result = preg_replace('/(?<=\p{L})(?=\d)|(?<=\d)(?=\p{L})/u', ' ', $value["alrp"]); ?>
+                                    <?= htmlspecialchars($result); ?>
                                 </p>
                                 <p class="lp_customer text-small">
                                     <?= htmlspecialchars($value["description"]); ?>
@@ -57,7 +83,7 @@
                                     </p>
                                 <?php endif; ?>
                                 <div class="lp_actions">
-                                    <p class="text-accent" data-modal-btn="lp_edit" data-js-lp-edit-number="<?= htmlspecialchars($value["alrp"]); ?>">Изменить</p>
+                                    <i class="bi bi-pen text-accent" data-modal-btn="lp_edit" data-js-lp-edit-number="<?= htmlspecialchars($value["alrp"]); ?>"></i>
                                 </div>
                             </div>
                         <?php endforeach; ?>

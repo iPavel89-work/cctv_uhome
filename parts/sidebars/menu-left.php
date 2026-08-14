@@ -4,7 +4,7 @@
         <i class="bi bi-house"></i>
     </a>
 
-    <button type="button" data-modal-btn="notifications" class="btn btn-icon btn-base">
-        <i class="bi bi-bell"></i>
+    <button type="button" data-modal-btn="addresses" class="btn btn-icon btn-base">
+        <i class="bi bi-geo"></i>
     </button>
 <?php endif; ?>

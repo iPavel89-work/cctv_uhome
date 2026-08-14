@@ -21,8 +21,11 @@ function auth($account, $password)
         mysqli_close($connection);
         return false;
     }
+    $row['house_list']=array();
     unset($row['password']);
-    $row['house_list']=explode(',', $row['houses']);
+    if(!empty($row['houses'])){
+        $row['house_list']=explode(',', $row['houses']);
+    }
 
     return $row;
 }

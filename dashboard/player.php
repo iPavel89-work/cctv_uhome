@@ -126,80 +126,166 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                 <div class="section section-info">
                     <a href="index.php" class="badge badge-base badge-s">
                         <i class="bi bi-chevron-left"></i>
-                        <span>Назад</span>
+                        <span class="hide-mobile" data-translate="word_backpage"></span>
                     </a>
-                    <div class="badge badge-base badge-s hide-mobile" data-modal-btn="addresses">
-                        <?= $_SESSION["address"][$_SESSION["current_hid"]]; ?>
-                    </div>
+                    <?php if ($SHOW_ADDRESSES_ELEMENTS): ?>
+                        <div class="badge badge-base badge-s hide-mobile">
+                            <?= $_SESSION["address"][$_SESSION["current_hid"]]; ?>
+                        </div>
+                    <?php endif; ?>
                     <div class="badge badge-s">
                         <?= $camera_data['name'] ?>
                     </div>
 
-                    <div class="badge badge-base badge-s ms-auto" data-modal-btn="video_date">
+                    <div class="badge badge-base badge-s ms-auto flex-shrink-0" data-modal-btn="video_date">
                         <i class="bi bi-calendar"></i>
                         <span><?= htmlspecialchars($date); ?></span>
                     </div>
                 </div>
 
-                <div class="section section-video">
+                <div class="section section-video" data-js-fullscreen-element>
                     <video
                             id="video"
-
                             autoplay
                             muted
-                            style="width:100%">
+                            style="width:100%"
+                    >
                     </video>
+
+                    <button class="btn btn-icon btn-blur btn-fullscreen" data-js-fullscreen-btn>
+                        <i class="bi bi-fullscreen"></i>
+                    </button>
+
                 </div>
 
                 <div class="section section-base section-timeline">
-                    <div class="section_inner">
-                        <div data-js-timeline></div>
-                    </div>
+
                     <div class="section_actions hide-mobile">
                         <div class="btns-horizontal">
                             <button type="button" class="btn btn-text btn-accent" data-modal-btn="video_date">
                                 <i class="bi bi-calendar"></i>
-                                <span>Выбрать дату</span>
-                            </button>
-                            <button type="button" class="btn btn-text btn-accent" onclick="takeVideoScreenshot()">
-                                <i class="bi bi-image"></i>
-                                <span>Сделать скриншот</span>
+                                <span data-translate="video_button_date"></span>
                             </button>
                             <button type="button" class="btn btn-text btn-accent" data-modal-btn="video_download">
                                 <i class="bi bi-download"></i>
-                                <span>Скачать видео</span>
+                                <span data-translate="video_button_download"></span>
+                            </button>
+                            <button type="button" class="btn btn-text btn-accent" onclick="takeVideoScreenshot()">
+                                <i class="bi bi-image"></i>
+                                <span data-translate="video_button_screenshot"></span>
+                            </button>
+
+
+                            <button data-timeline-controls="moveLeft" type="button"
+                                    class="btn btn-text btn-accent ms-auto">
+                                <i class="bi bi-arrow-left"></i>
+                            </button>
+                            <button data-timeline-controls="zoomIn" type="button" class="btn btn-text btn-accent">
+                                <i class="bi bi-zoom-in"></i>
+                            </button>
+                            <button data-timeline-controls="zoomOut" type="button" class="btn btn-text btn-accent">
+                                <i class="bi bi-zoom-out"></i>
+                            </button>
+                            <button data-timeline-controls="moveRight" type="button" class="btn btn-text btn-accent">
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+
+                            <a href="player.php?i_id=<?= $i_id; ?>" class="btn btn-text btn-danger">
+                                <i class="bi bi-broadcast"></i>
+                                <span data-translate="video_button_online"></span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="section_separator hide-mobile"></div>
+
+                    <div class="section_inner">
+                        <div data-js-timeline></div>
+                    </div>
+
+                    <div class="section_separator hide-desktop"></div>
+                    <div class="section_actions hide-desktop">
+                        <div class="btns-horizontal">
+                            <button data-timeline-controls="moveLeft" type="button"
+                                    class="btn btn-text btn-accent">
+                                <i class="bi bi-arrow-left"></i>
+                            </button>
+                            <button data-timeline-controls="zoomIn" type="button" class="btn btn-text btn-accent">
+                                <i class="bi bi-zoom-in"></i>
+                            </button>
+                            <button data-timeline-controls="zoomOut" type="button" class="btn btn-text btn-accent">
+                                <i class="bi bi-zoom-out"></i>
+                            </button>
+                            <button data-timeline-controls="moveRight" type="button" class="btn btn-text btn-accent">
+                                <i class="bi bi-arrow-right"></i>
                             </button>
 
                             <a href="player.php?i_id=<?= $i_id; ?>" class="btn btn-text btn-danger ms-auto">
                                 <i class="bi bi-circle-fill"></i>
-                                <span>Прямой эфир</span>
+                                <span data-translate="video_button_online"></span>
                             </a>
                         </div>
-
                     </div>
+
+
                 </div>
             </div>
             <div class="layout_widgets">
 
-                <?php if($camera_type !== 'camera'): ?>
+                <div class="widget widget-controls hide-desktop">
+                    <div class="widget_title" data-translate="widget_actions_title"></div>
+
+                    <div class="widget_content">
+                        <div class="widget_buttons">
+
+                            <?php if ($permitions['video_archive'] === 1): ?>
+                                <button class="btn btn-circle" type="button" data-modal-btn="video_date">
+                                    <span class="btn-circle_icon">
+                                        <i class="bi bi-calendar"></i>
+                                    </span>
+                                    <span class="btn-circle_text" data-translate="video_button_date"></span>
+                                </button>
+                            <?php endif; ?>
+
+                            <?php if ($permitions['video_download'] === 1): ?>
+                                <button class="btn btn-circle" type="button" data-modal-btn="video_download">
+                                    <span class="btn-circle_icon">
+                                        <i class="bi bi-cloud-download"></i>
+                                    </span>
+                                    <span class="btn-circle_text" data-translate="video_button_download"></span>
+                                </button>
+                            <?php endif; ?>
+
+                            <button class="btn btn-circle" type="button" onclick="takeVideoScreenshot()">
+                                <span class="btn-circle_icon">
+                                    <i class="bi bi-card-image"></i>
+                                </span>
+                                <span class="btn-circle_text" data-translate="video_button_screenshot"></span>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <?php if ($camera_type !== 'camera'): ?>
                     <div class="widget widget-controls">
-                        <div class="widget_title">
-                            Управление
+                        <div class="widget_title" data-translate="widget_controls_title">
+
                         </div>
                         <div class="widget_content">
                             <div class="widget_buttons">
                                 <?php if ($_SESSION['current_camera']['type'] == 'gate'): ?>
 
-                                    <?php if($permitions['control_gate'] === 1): ?>
-                                        <form action="<?= $document_root; ?>/dashboard/api.php" data-js-form-fetch="intercom_open" method="POST">
+                                    <?php if ($permitions['control_gate'] === 1): ?>
+                                        <form action="<?= $document_root; ?>/dashboard/api.php"
+                                              data-js-gate-form="open_gate" method="POST">
                                             <input type="hidden" name="action" value="open_gate">
                                             <button class="btn btn-circle" type="submit">
                                                 <span class="btn-circle_icon">
                                                 <i class="bi bi-door-open"></i>
                                             </span>
-                                                <span class="btn-circle_text">
-                                                    Открыть шлагбаум
-                                                </span>
+                                                <span class="btn-circle_text"
+                                                      data-translate="gate_actions_button_open"></span>
                                             </button>
                                         </form>
                                     <?php endif; ?>
@@ -207,38 +293,37 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
 
                                     <?php if ($permitions['lp_view'] === 1): ?>
                                         <button class="btn btn-circle" type="button" data-modal-btn="lp_list">
-                                        <span class="btn-circle_icon">
-                                            <i class="bi bi-card-checklist"></i>
-                                        </span>
-                                            <span class="btn-circle_text">
-                                            Список номеров
-                                        </span>
+                                            <span class="btn-circle_icon">
+                                                <i class="bi bi-card-checklist"></i>
+                                            </span>
+                                            <span class="btn-circle_text"
+                                                  data-translate="gate_actions_button_lplist"></span>
                                         </button>
                                     <?php endif; ?>
 
                                     <?php if ($permitions['lp_add'] === 1): ?>
                                         <button class="btn btn-circle" type="button" data-modal-btn="lp_add">
-                                        <span class="btn-circle_icon">
-                                            <i class="bi bi-plus-lg"></i>
-                                        </span>
-                                            <span class="btn-circle_text">
-                                            Добавить номер
-                                        </span>
+                                            <span class="btn-circle_icon">
+                                                <i class="bi bi-plus-lg"></i>
+                                            </span>
+                                            <span class="btn-circle_text"
+                                                  data-translate="gate_actions_button_lpadd"></span>
                                         </button>
                                     <?php endif; ?>
 
                                 <?php endif; ?>
 
                                 <?php if ($_SESSION['current_camera']['type'] == 'intercom'): ?>
-                                    <?php if($permitions['control_intercom'] === 1): ?>
-                                        <form action="<?= $document_root; ?>/dashboard/api.php" data-js-form-fetch="intercom_open" method="POST">
+                                    <?php if ($permitions['control_intercom'] === 1): ?>
+                                        <form action="<?= $document_root; ?>/dashboard/api.php"
+                                              data-js-intercom-form="open_door" method="POST">
                                             <input type="hidden" name="action" value="open_door">
                                             <button class="btn btn-circle" type="submit">
                                                 <span class="btn-circle_icon">
                                                     <i class="bi bi-door-open"></i>
                                                 </span>
-                                                <span class="btn-circle_text">
-                                                    Открыть домофон
+                                                <span class="btn-circle_text"
+                                                      data-translate="intercom_actions_button_open">
                                                 </span>
                                             </button>
                                         </form>
@@ -249,55 +334,11 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                     </div>
                 <?php endif; ?>
 
-                <div class="widget widget-controls hide-desktop">
-                    <div class="widget_title">
-                        Действия
-                    </div>
-                    <div class="widget_content">
-                        <div class="widget_buttons">
 
-                            <?php if ($permitions['video_archive'] === 1): ?>
-                                <button class="btn btn-circle" type="button" data-modal-btn="video_date">
-                                    <span class="btn-circle_icon">
-                                        <i class="bi bi-calendar"></i>
-                                    </span>
-                                        <span class="btn-circle_text">
-                                        Изменить дату
-                                    </span>
-                                </button>
-                            <?php endif; ?>
-
-                            <?php if ($permitions['video_download'] === 1): ?>
-                                <button class="btn btn-circle" type="button" data-modal-btn="video_download">
-                                    <span class="btn-circle_icon">
-                                        <i class="bi bi-cloud-download"></i>
-                                    </span>
-                                        <span class="btn-circle_text">
-                                        Скачать видео
-                                    </span>
-                                </button>
-                            <?php endif; ?>
-
-                            <button class="btn btn-circle" type="button" onclick="takeVideoScreenshot()">
-                                <span class="btn-circle_icon">
-                                    <i class="bi bi-card-image"></i>
-                                </span>
-                                    <span class="btn-circle_text">
-                                    Сделать скриншот
-                                </span>
-                            </button>
-
-                        </div>
-                    </div>
-                </div>
-
-
-                <?php if(!empty($last_events)): ?>
+                <?php if (!empty($last_events)): ?>
                     <?php if ($permitions['video_events']): ?>
                         <div class="widget widget-levents pb-0">
-                            <div class="widget_title">
-                                Последние события
-                            </div>
+                            <div class="widget_title" data-translate="widget_events_title"></div>
 
 
                             <div class="widget_content">
@@ -308,7 +349,8 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                                                 <i class="bi bi-exclamation-triangle text-danger"></i>
                                             </div>
                                             <div class="item_content">
-                                                <div class="item_title"><?= $events_translate[$value['EventSubjectID']]; ?></div>
+                                                <div class="item_title"
+                                                     data-translate="<?= $events_translate[$value['EventSubjectID']]; ?>"></div>
                                                 <div class="item_desc">
                                                     <p class="text-small text-light"><?= date("H:i:s", $value['Time']); ?></p>
                                                 </div>
@@ -321,8 +363,7 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                             <?php if (count($all_events) > 1): ?>
                                 <div class="widget_action">
                                     <button class="btn btn-text btn-accent btn-full btn-widget"
-                                            data-modal-btn="video_events">
-                                        Показать все
+                                            data-modal-btn="video_events" data-translate="widget_events_more">
                                     </button>
                                 </div>
                             <?php endif; ?>
@@ -341,18 +382,19 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
     </div>
 
 
-    data-js-fullscreen-btn
-    data-js-fullscreen-element
 
     <link rel="stylesheet" href="<?= $document_root; ?>/assets/css/vis-timeline.css">
     <script src="<?= $document_root; ?>/assets/js/vis-timeline.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flv.js/dist/flv.min.js"></script>
+    <script src="<?= $document_root; ?>/assets/js/flv.min.js"></script>
+
 
 
     <script>
 
-        window.addEventListener('DOMContentLoaded', () => {
+        let FLVPLAYER = null;
+        let TIMELINE;
 
+        window.addEventListener('DOMContentLoaded', () => {
 
             const TIMELINE_VIDEO = document.getElementById('video'); // ID должен совпадать с вашим тегом <video id="video">
             const TIMELINE_ELEMENT = document.querySelector("[data-js-timeline]"); // Блок таймлайна
@@ -366,25 +408,25 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                     button.addEventListener('click', (e) => {
                         const TIME_EVENT = button.getAttribute('data-js-event'); // Берём значение времени у кнопки в дата-атрибуте
                         handleChangeTime(TIME_EVENT); // Передаём время в функцию
+
                     });
                 });
             }
 
 
-            let flvPlayer = null;
 
             function changeStream(newUrl) {
                 if (!flvjs.isSupported()) return;
 
-                if (flvPlayer) {
-                    flvPlayer.pause();
-                    flvPlayer.unload();
-                    flvPlayer.detachMediaElement();
-                    flvPlayer.destroy();
-                    flvPlayer = null;
+                if (FLVPLAYER) {
+                    FLVPLAYER.pause();
+                    FLVPLAYER.unload();
+                    FLVPLAYER.detachMediaElement();
+                    FLVPLAYER.destroy();
+                    FLVPLAYER = null;
                 }
 
-                flvPlayer = flvjs.createPlayer({
+                FLVPLAYER = flvjs.createPlayer({
                     type: 'flv',
                     url: newUrl,
                     isLive: true,
@@ -395,10 +437,10 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                 });
 
                 // Привязываем к HTML-элементу и запускаем
-                flvPlayer.attachMediaElement(TIMELINE_VIDEO);
-                flvPlayer.load();
-                flvPlayer.play().catch(error => {
-                    console.log("Автозапуск заблокирован браузером, нужен клик пользователя:", error);
+                FLVPLAYER.attachMediaElement(TIMELINE_VIDEO);
+                FLVPLAYER.load();
+                FLVPLAYER.play().catch(error => {
+                    console.log("Автозапуск заблокирован браузером", error);
                 });
             }
 
@@ -406,24 +448,39 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
             changeStream(initialUrl);
 
 
-
             // Начало таймлайна и конец
             const TIMELINE_OPTIONS = {
                 showCurrentTime: true,
                 height: 64,
-                start: new Date("<?= $date . ' 00:00:00'?>"), // PHP: Начальная дата всей полосы
-                end: new Date("<?= $date . ' 23:59:59'?>"), // PHP: Конечная дата всей полосы
-                min: new Date("<?= $date . ' 00:00:00'?>"), // PHP: Минимальная дата всей полосы
-                max: new Date("<?= $date . ' 23:59:59'?>"), // PHP: Максимальная дата всей полосы
+                zoomMin: 1000 * 60,
+                start: new Date("<?= htmlspecialchars($date) . ' 00:00:00'?>"), // PHP: Начальная дата всей полосы
+                end: new Date("<?= htmlspecialchars($date) . ' 23:59:59'?>"), // PHP: Конечная дата всей полосы
+                min: new Date("<?= htmlspecialchars($date) . ' 00:00:00'?>"), // PHP: Минимальная дата всей полосы
+                max: new Date("<?= htmlspecialchars($date) . ' 23:59:59'?>"), // PHP: Максимальная дата всей полосы
+                //
+                // start: new Date("2026-08-12 00:00:00"), // PHP: Начальная дата всей полосы
+                // end: new Date("2026-08-12 23:59:59"), // PHP: Конечная дата всей полосы
+                // min: new Date("2026-08-12 00:00:00"), // PHP: Минимальная дата всей полосы
+                // max: new Date("2026-08-12 23:59:59"), // PHP: Максимальная дата всей полосы
             };
 
             const TIMELINE_ITEMS = new vis.DataSet([]);
 
             // Инициализация таймлайна
-            const TIMELINE = new vis.Timeline(TIMELINE_ELEMENT, TIMELINE_ITEMS, TIMELINE_OPTIONS);
+            TIMELINE = new vis.Timeline(TIMELINE_ELEMENT, TIMELINE_ITEMS, TIMELINE_OPTIONS);
 
             // Добавляем синий маркер
             TIMELINE.addCustomTime(new Date(), "vis-selectedTime");
+            TIMELINE.addCustomTime(new Date(), 'vis-hoverTime');
+
+            // Вешаем обработчик движения мыши
+            TIMELINE.on('mouseMove', function ({event, time}) {
+                const isMouse = event.pointerType === 'mouse';
+
+                if (isMouse && time) {
+                    TIMELINE.setCustomTime(time, 'vis-hoverTime');
+                }
+            });
 
             // Обработка клика на таймлайне
             // {time} вытаскиваем переменную time из event-a и передаём в функцию
@@ -432,21 +489,9 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                 handleChangeTime(TIME_QUERY);
             });
 
+            // FIX
+            TIMELINE.redraw();
 
-            // Функция
-            // async function handleChangeTime(time) {
-            //
-            //     let TIME = time; // Значение полученного времени
-            //     let TIME_QUERY = Math.round(Date.parse(TIME) / 1000); // Конвертируем время в секунды
-            //     // Отправляем запрос и передаём туда время, в src вернётся строка со значением, либо просто ""
-            //     const src = await QUERY_VIDEO_API(TIME);
-            //
-            //     // Провеярем, чтобы строка не была пустой
-            //     if (src.length > 0) {
-            //         changeStream(src);
-            //         MODAL.close('video_events')
-            //     }
-            // }
 
             // Функция
             async function handleChangeTime(time) {
@@ -468,12 +513,11 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                 // Добавляем класс таймлайну
                 TIMELINE_ELEMENT.classList.add('timeline-loading');
 
-                // Если есть кнопки с событиями, то блокируем их
-                if (BUTTON_EVENTS.length > 0) {
-                    BUTTON_EVENTS.forEach(btn => {
-                        btn.setAttribute('disabled', 'true');
-                    })
-                }
+                // Добавляем класс событиям
+                document.querySelectorAll('[data-js-event]').forEach(btn => {
+                    btn.classList.add('isLoading');
+                })
+
 
                 // Отправляем запрос и передаём туда время, в src вернётся строка со значением, либо просто ""
                 const src = await QUERY_VIDEO_API(TIME);
@@ -481,8 +525,16 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                 // Провеярем, чтобы строка не была пустой
                 if (src.length > 0) {
 
+                    const INPUT_DATE = document.querySelector('[data-js-video-download-date]');
+
                     // Устанавливаем позицию маркера по полученному TIME
                     TIMELINE.setCustomTime(TIME * 1000, "vis-selectedTime");
+                    if(INPUT_DATE) {
+                        const TEMP_DATE = new Date(TIME * 1000);
+                        const TEMP_OFFSET = TEMP_DATE.getTimezoneOffset() * 60000;
+                        const TEMP_RESULT = new Date(TEMP_DATE.getTime() - TEMP_OFFSET).toISOString().slice(0, 16);
+                        INPUT_DATE.value = TEMP_RESULT;
+                    }
 
                     // Запускаем стрим
                     changeStream(src);
@@ -490,6 +542,14 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                     // Перемещаем визуально таймлайн к маркеру
                     TIMELINE.moveTo(TIME * 1000);
 
+                } else {
+                    showToast('Ошибка получения архива события', 'danger');
+                }
+
+                if(isMobile) {
+                    setTimeout(() => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 200);
                 }
 
                 // Устанавливаем, что ответ получен
@@ -498,47 +558,79 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
                 // Удаляем класс у таймлайна
                 TIMELINE_ELEMENT.classList.remove('timeline-loading');
 
-                // Если есть кнопки с событиями, то разблокируем их
-                if (BUTTON_EVENTS.length > 0) {
-                    BUTTON_EVENTS.forEach(btn => {
-                        btn.removeAttribute('disabled');
-                    })
-                }
-                if(MODAL) {
+                // Удаляем класс у событий
+                document.querySelectorAll('[data-js-event]').forEach(btn => {
+                    btn.classList.remove('isLoading');
+                })
+
+                if (MODAL) {
                     MODAL.close('video_events')
                 }
 
             }
 
-            // Запрос на получения ссылки для видео
             async function QUERY_VIDEO_API(TIME) {
-
                 let data = {};
-                let formdata = new FormData();
+                const formdata = new FormData();
 
                 formdata.append("ts", TIME);
                 formdata.append("tz", "18000");
                 formdata.append("action", "get_archive");
 
                 try {
-
                     const response = await fetch(API_URL, {
                         method: "POST",
                         body: formdata,
                         redirect: "follow"
                     });
+
+                    if (!response.ok) {
+                        toast.show('Ошибка получения архива', 'warning');
+                        console.log(`HTTP error: ${response.status}`);
+                        return "";
+                    }
+
                     data = await response.json();
 
                     if (data.ErrorCode !== undefined) {
-                        toast.show('Ошибка получения архива', 'warning')
+                        toast.show('Ошибка получения архива', 'warning');
+                        return "";
                     }
 
                 } catch (error) {
-                    console.log('Catch error ' + error)
-                } finally {
-                    return data.URL !== undefined ? data.URL : ""; // В конце в любом случае возвращаем ссылку или пустую строку
+                    toast.show('Ошибка получения архива', 'warning');
+                    console.log('Catch error ' + error);
+                    return "";
                 }
 
+                return data.URL !== undefined ? data.URL : "";
+            }
+
+            const TIMELINE_CONTROLS_STEP = 0.5;
+            const TIMELINE_CONTROLS = document.querySelectorAll('[data-timeline-controls]');
+
+            TIMELINE_CONTROLS.forEach(btn => {
+                btn.addEventListener('click', e => {
+
+                    const TIMELINE_CONTROLS_ACTION = e.currentTarget.getAttribute('data-timeline-controls');
+
+                    TIMELINE_CONTROLS_ACTION === "moveLeft" ? move(TIMELINE_CONTROLS_STEP) : "";
+                    TIMELINE_CONTROLS_ACTION === "moveRight" ? move(-TIMELINE_CONTROLS_STEP) : "";
+
+                    TIMELINE_CONTROLS_ACTION === "zoomIn" ? TIMELINE.zoomIn(1) : "";
+                    TIMELINE_CONTROLS_ACTION === "zoomOut" ? TIMELINE.zoomOut(1) : "";
+
+                });
+            });
+
+            function move(percentage) {
+                let range = TIMELINE.getWindow();
+                let interval = range.end - range.start;
+
+                TIMELINE.setWindow({
+                    start: range.start.valueOf() - interval * percentage,
+                    end: range.end.valueOf() - interval * percentage
+                });
             }
 
         });
@@ -546,7 +638,7 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
     </script>
 
 
-    <?php if($camera_type === 'gate'): ?>
+<?php if ($camera_type === 'gate'): ?>
     <script>
 
         const ALRP_DATA = {
@@ -566,7 +658,7 @@ $get_customers = get_customers($_SESSION['current_hid']); // Получение 
         };
 
     </script>
-    <?php endif; ?>
+<?php endif; ?>
 
 <?php
 if ($camera_type === "gate") {

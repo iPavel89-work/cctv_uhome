@@ -1,8 +1,8 @@
 <?php
 $ADMIN_PAGE = true;
-$PAGE = 'start';
+$PAGE = 'dashboard';
 $PAGE_TITLE = 'Стартовая страница';
-$PAGE_TITLE_KEY = 'page_start_title';
+$PAGE_TITLE_KEY = 'page_dashboard_title';
 include "includes/base.php";
 include "includes/data.php";
 

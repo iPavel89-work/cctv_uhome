@@ -38,10 +38,12 @@ $_SESSION['house_list'] = $auth['house_list'];
 $_SESSION['active'] = $auth['active'];
 $_SESSION['session_version'] = $auth['session'];  //чтобы убивать сессии при смене пароля или блокировке
 
-foreach($auth['house_list'] as $key){
-    $address = get_full_address(array('hid'=>$key));
-    $_SESSION['address'][$key] = $address;
-}
+    foreach($auth['house_list'] as $key){
+        $address = get_full_address(array('hid'=>$key));
+        $_SESSION['address'][$key] = $address;
+    }
+
+
 if ($_SESSION['auth_state']) {
     $data['status']='success';
     header('Location: ../index.php');

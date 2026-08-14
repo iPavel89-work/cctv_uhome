@@ -36,6 +36,7 @@ document.querySelectorAll('[data-lang]').forEach(element => {
 
   element.addEventListener('click', e => {
     updateLanguage(e.currentTarget.dataset.lang);
+    updateCaptchaLang(e.currentTarget.dataset.lang);
   });
 });
 
@@ -64,5 +65,42 @@ function updateLanguage(lang) {
 
 // Инициализация
 updateLanguage(currentLang);
+updateCaptchaLang(currentLang);
+
+function updateCaptchaLang(lang = 'ru') {
+
+  const captchaLangs = ['en', 'ru', 'kk'];
+  if (!captchaLangs.includes(lang)) {
+    lang = 'ru';
+  }
+
+  const captchaData = {
+    'en': {
+      capI18nErrorLabel: 'Error',
+      capI18nInitialState: 'I am not a robot',
+      capI18nSolvedLabel: 'Verification passed',
+      capI18nVerifyingLabel: 'Please wait...'
+    },
+    'ru': {
+      capI18nErrorLabel: 'Ошибка',
+      capI18nInitialState: 'Я не робот',
+      capI18nSolvedLabel: 'Проверка пройдена',
+      capI18nVerifyingLabel: 'Подождите...'
+    },
+    'kk': {
+      capI18nErrorLabel: 'Qate',
+      capI18nInitialState: 'Men robot emespin',
+      capI18nSolvedLabel: 'Tekserý ótti',
+      capI18nVerifyingLabel: 'Kúte turyńyz...'
+    }
+  };
+  if(CAPTCHA_WIDGET){
+    CAPTCHA_WIDGET.dataset.capI18nErrorLabel = captchaData[lang].capI18nErrorLabel;
+    CAPTCHA_WIDGET.dataset.capI18nInitialState = captchaData[lang].capI18nInitialState;
+    CAPTCHA_WIDGET.dataset.capI18nSolvedLabel = captchaData[lang].capI18nSolvedLabel;
+    CAPTCHA_WIDGET.dataset.capI18nVerifyingLabel = captchaData[lang].capI18nVerifyingLabel;
+  }
+
+}
 
 

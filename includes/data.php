@@ -7,14 +7,11 @@ if (!isset($_SESSION['auth_state']) || $_SESSION['auth_state'] !== true) {
 //Блок прав пользователя
 $permitions = get_permitions($_SESSION['user_id']);
 $check_version = get_session_version($_SESSION['user_id']);
-if(!isset($_SESSION['house_list']) || empty($_SESSION['house_list']) ){
-    header('Location: ' . $document_root . '/dashboard/placeholder.php');
-    exit;
-}
-//unset
-//unset ($_SESSION['current_camera']);
 
-//end unset
+
+
+
+// Версия сессии
 $session_version = $_SESSION['session_version'];
 if ($session_version !== $check_version['session']) {
     session_destroy();

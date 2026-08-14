@@ -10,6 +10,14 @@ if (!empty($ERROR_CODE) && isset($PAGE_ERRORS[$ERROR_CODE])) {
     $SHOW_TOAST = true;
 }
 
+// Отображение элементов адресов
+$SHOW_ADDRESSES_ELEMENTS = false;
+if(isset($_SESSION["address"])) {
+    if(count($_SESSION['address']) > 1) {
+        $SHOW_ADDRESSES_ELEMENTS = true;
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -32,17 +40,16 @@ if (!empty($ERROR_CODE) && isset($PAGE_ERRORS[$ERROR_CODE])) {
     <link rel="stylesheet" href="<?= $document_root; ?>/assets/css/index.css">
     <link rel="stylesheet" href="<?= $document_root; ?>/assets/css/modal.css">
     <link rel="stylesheet" href="<?= $document_root; ?>/assets/css/captcha.css">
-    <script src="<?= $document_root; ?>/assets/js/toast2.1.js" defer></script>
+
+
     <script src="<?= $document_root; ?>/assets/js/functions.js" defer></script>
+    <script src="<?= $document_root; ?>/assets/js/toast.js" defer></script>
     <script src="<?= $document_root; ?>/assets/js/modal.js" defer></script>
-    <script src="<?= $document_root; ?>/assets/js/checkbox-filter.js" defer></script>
     <script src="<?= $document_root; ?>/assets/js/index.js" defer></script>
+
     <script src="<?= $document_root; ?>/assets/js/translations.js" defer></script>
     <script src="<?= $document_root; ?>/assets/js/translate.js" defer></script>
-    <script src="<?= $document_root; ?>/assets/js/fetch.js" defer></script>
 
-<!--    <link rel="prefetch" href="https://cdn.jsdelivr.net/npm/@cap.js/wasm@0.0.6/browser/cap_wasm.min.js" as="script">-->
-<!--    <link rel="prefetch" href="https://cdn.jsdelivr.net/npm/@cap.js/wasm@0.0.6/browser/cap_wasm_bg.wasm" as="fetch">-->
 </head>
 <body>
 
